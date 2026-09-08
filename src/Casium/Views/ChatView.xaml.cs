@@ -169,7 +169,7 @@ public partial class ChatView : UserControl
 
     private void Suggestion_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is FrameworkElement { Content: string text })
+        if (sender is ContentControl { Content: string text })
         {
             Input.Text = text;
             Input.CaretIndex = Input.Text.Length;

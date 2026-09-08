@@ -79,6 +79,8 @@ public partial class BrowseView : UserControl
 
     // ================================================================ filtering
 
+    private bool _syncingChips;
+
     private void BuildChips()
     {
         var categories = new[] { "All", "General", "Coding", "Reasoning", "Vision" };
@@ -89,10 +91,25 @@ public partial class BrowseView : UserControl
                 Style = (Style)FindResource("Chip"),
                 Content = category,
                 IsChecked = category == "All",
-                GroupName = "BrowseCategory",
                 Margin = new Thickness(0, 0, 8, 0)
             };
-            chip.Checked += (_, _) => { _category = category; ApplyFilter(); };
+            chip.Checked += (_, _) =>
+            {
+                if (_syncingChips) return;
+                _syncingChips = true;
+                try
+                {
+                    // ToggleButton has no GroupName — enforce mutual exclusivity by hand.
+                    foreach (var other in _chips)
+                        if (!ReferenceEquals(other, chip)) other.IsChecked = false;
+                    _category = category;
+                    ApplyFilter();
+                }
+                finally
+                {
+                    _syncingChips = false;
+                }
+            };
             _chips.Add(chip);
             CategoryChips.Children.Add(chip);
         }
