@@ -1,4 +1,4 @@
-import { gradeColor, gradeLabel } from "../lib/compatibility";
+import { gradeLabel } from "../lib/compatibility";
 import type { Grade } from "../lib/types";
 import clsx from "clsx";
 
@@ -14,30 +14,23 @@ export function GradeBadge({
   showLabel?: boolean;
 }) {
   const dim =
-    size === "lg"
-      ? "h-12 w-12 text-[22px]"
-      : size === "sm"
-        ? "h-6 w-6 text-[11px]"
-        : "h-8 w-8 text-sm";
+    size === "lg" ? "h-8 w-8 text-[15px]" : size === "sm" ? "h-5 w-5 text-[10px]" : "h-6 w-6 text-[12px]";
   return (
     <div className="inline-flex items-center gap-2">
       <span
         className={clsx(
-          "inline-flex items-center justify-center rounded-lg border font-semibold tracking-tight",
+          "inline-flex items-center justify-center rounded font-medium",
           dim,
           `grade-${grade}`,
         )}
-        style={{ boxShadow: `0 0 18px ${gradeColor(grade)}22` }}
         title={gradeLabel(grade)}
       >
         {grade}
       </span>
       {showLabel && (
         <div className="leading-tight">
-          <div className="text-xs font-medium text-white/85">{gradeLabel(grade)}</div>
-          {score != null && (
-            <div className="font-mono text-[10px] text-white/40">{score}/100</div>
-          )}
+          <div className="text-[13px] text-fg">{gradeLabel(grade)}</div>
+          {score != null && <div className="font-mono text-[11px] text-mute">{score}/100</div>}
         </div>
       )}
     </div>
@@ -61,9 +54,9 @@ export function QuantPills({
           type="button"
           onClick={() => onPick?.(q.quant)}
           className={clsx(
-            "rounded-md border px-1.5 py-0.5 font-mono text-[10px] transition",
+            "rounded px-1.5 py-0.5 font-mono text-[10px]",
             `grade-${q.grade}`,
-            active === q.quant && "ring-1 ring-white/40",
+            active === q.quant && "outline outline-1 outline-fg/40",
           )}
         >
           {q.quant}

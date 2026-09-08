@@ -107,7 +107,7 @@ function compose(input: {
   if (githubNames.length) ctxBits.push(`GitHub **${githubNames.join(", ")}**`);
   if (mcp.length) ctxBits.push(`MCP (${mcp.map((m) => m.name).join(", ")})`);
 
-  const header = `_Running **${model.name}** · ${quant} · ~${best.tokensPerSecond} tok/s on ${hardware.gpuName}_`;
+  const header = `${model.name} · ${quant} · ~${best.tokensPerSecond} tok/s · ${hardware.gpuName}`;
 
   if (input.wantsHardware) {
     return `${header}
@@ -121,7 +121,7 @@ Your machine is graded as **${hardware.gpuName}** with **${hardware.vramGb} GB**
 
 ${best.notes.map((n) => `- ${n}`).join("\n")}
 
-Open **Browse** to compare every model the same way CanIRun.ai does — S/A/B run well, C/D are tight, F will not fit.`;
+S/A/B run well. C/D is tight or offload. F will not fit.`;
   }
 
   if (input.wantsCode) {

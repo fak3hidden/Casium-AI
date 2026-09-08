@@ -60,7 +60,7 @@ function seedConversation(): Conversation {
         id: uid("msg"),
         role: "assistant",
         content:
-          "Casium is ready. I’m running locally — pick a model that fits your GPU, or ask me anything. Attach a VS project, GitHub repo, or MCP server when you want the model inside your code.",
+          "Ready. Pick a model, or open Browse to see what fits this GPU.",
         createdAt: now,
         modelId: "qwen2.5-7b",
       },

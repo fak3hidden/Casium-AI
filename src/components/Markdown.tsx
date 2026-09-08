@@ -3,7 +3,7 @@ import { Fragment } from "react";
 export function Markdown({ text }: { text: string }) {
   const blocks = splitBlocks(text);
   return (
-    <div className="prose-casium text-[14.5px] leading-relaxed text-white/80">
+    <div className="prose-casium text-[13.5px] leading-[1.55] text-[#d0d0d4]">
       {blocks.map((b, i) => {
         if (b.type === "pre") {
           return (
@@ -17,8 +17,8 @@ export function Markdown({ text }: { text: string }) {
             {b.body.split("\n").map((line, j) => {
               if (/^\s*[-*]\s+/.test(line)) {
                 return (
-                  <div key={j} className="flex gap-2 pl-1">
-                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-casium/80" />
+                  <div key={j} className="flex gap-2 pl-0.5">
+                    <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-mute" />
                     <span>{inline(line.replace(/^\s*[-*]\s+/, ""))}</span>
                   </div>
                 );
@@ -26,8 +26,8 @@ export function Markdown({ text }: { text: string }) {
               if (/^\s*\d+\.\s+/.test(line)) {
                 const n = line.match(/^\s*(\d+)\./)?.[1];
                 return (
-                  <div key={j} className="flex gap-2 pl-1">
-                    <span className="font-mono text-[11px] text-casium/80 mt-0.5 w-4">{n}.</span>
+                  <div key={j} className="flex gap-2">
+                    <span className="w-4 font-mono text-[11px] text-mute">{n}.</span>
                     <span>{inline(line.replace(/^\s*\d+\.\s+/, ""))}</span>
                   </div>
                 );
@@ -59,15 +59,9 @@ function splitBlocks(text: string) {
 function inline(s: string) {
   const tokens = s.split(/(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g);
   return tokens.map((t, i) => {
-    if (t.startsWith("`") && t.endsWith("`")) {
-      return <code key={i}>{t.slice(1, -1)}</code>;
-    }
-    if (t.startsWith("**") && t.endsWith("**")) {
-      return <strong key={i}>{t.slice(2, -2)}</strong>;
-    }
-    if (t.startsWith("*") && t.endsWith("*")) {
-      return <em key={i}>{t.slice(1, -1)}</em>;
-    }
+    if (t.startsWith("`") && t.endsWith("`")) return <code key={i}>{t.slice(1, -1)}</code>;
+    if (t.startsWith("**") && t.endsWith("**")) return <strong key={i}>{t.slice(2, -2)}</strong>;
+    if (t.startsWith("*") && t.endsWith("*")) return <em key={i}>{t.slice(1, -1)}</em>;
     return <Fragment key={i}>{t}</Fragment>;
   });
 }

@@ -7,19 +7,19 @@ export function SettingsView() {
   const { settings, hardware } = store.state;
 
   return (
-    <div className="min-h-0 flex-1 overflow-y-auto p-6">
-      <div className="mx-auto max-w-2xl">
-        <div className="font-serif text-3xl italic">Settings</div>
-        <p className="mt-1 text-sm text-white/45">
-          Inference, the local API, and the hardware profile used to grade models.
-        </p>
+    <div className="min-h-0 flex-1 overflow-y-auto">
+      <div className="border-b border-line px-4 py-3">
+        <h1 className="text-[15px] font-medium">Settings</h1>
+        <p className="mt-0.5 text-[12px] text-mute">Inference, local API, hardware profile.</p>
+      </div>
 
-        <Block title="Hardware profile">
-          <p className="mb-3 text-[13px] text-white/45">
-            Detected via WebGL / WebGPU renderer strings, then matched to a VRAM and bandwidth
-            database — the CanIRun.ai method. Override anything that’s wrong.
+      <div className="mx-auto max-w-[640px] px-4 py-5">
+        <Block title="Hardware">
+          <p className="mb-3 text-[13px] text-mute">
+            WebGL / WebGPU renderer string matched to a VRAM and bandwidth table. Override if the
+            guess is wrong.
           </p>
-          <div className="grid grid-cols-2 gap-2 text-sm">
+          <div className="grid grid-cols-2 gap-px overflow-hidden border border-line bg-line text-[13px]">
             <Row k="GPU" v={hardware.gpuName} />
             <Row k="VRAM" v={`${hardware.vramGb} GB`} />
             <Row k="Bandwidth" v={`${hardware.bandwidthGBs} GB/s`} />
@@ -28,16 +28,13 @@ export function SettingsView() {
             <Row k="Memory" v={hardware.unifiedMemory ? "Unified" : "Discrete"} />
           </div>
           {hardware.renderer && (
-            <div className="mt-2 truncate font-mono text-[11px] text-white/30">{hardware.renderer}</div>
+            <div className="mt-2 truncate font-mono text-[11px] text-faint">{hardware.renderer}</div>
           )}
           <button
-            className="mt-3 rounded-xl border border-white/10 px-3 py-2 text-sm text-white/70 hover:text-white"
-            onClick={async () => {
-              const hw = await detectHardware();
-              store.setHardware(hw);
-            }}
+            className="btn btn-ghost mt-3"
+            onClick={async () => store.setHardware(await detectHardware())}
           >
-            Re-detect hardware
+            Re-detect
           </button>
         </Block>
 
@@ -69,16 +66,16 @@ export function SettingsView() {
         </Block>
 
         <Block title="Local API">
-          <label className="flex items-center justify-between text-sm">
+          <label className="flex h-8 items-center justify-between text-[13px]">
             <span>OpenAI-compatible server</span>
             <input
               type="checkbox"
-              className="accent-casium"
+              className="accent-white"
               checked={settings.apiEnabled}
               onChange={(e) => store.setSettings({ apiEnabled: e.target.checked })}
             />
           </label>
-          <label className="mt-3 block text-[12px] text-white/40">
+          <label className="mt-2 block text-[12px] text-mute">
             Port
             <input
               type="number"
@@ -87,7 +84,7 @@ export function SettingsView() {
               onChange={(e) => store.setSettings({ apiPort: Number(e.target.value) })}
             />
           </label>
-          <pre className="mt-3 overflow-x-auto rounded-xl border border-white/10 bg-ink-950 p-3 font-mono text-[11px] text-white/60">{`curl http://127.0.0.1:${settings.apiPort}/v1/chat/completions \\
+          <pre className="mt-3 overflow-x-auto border border-line bg-bg p-3 font-mono text-[11px] text-mute">{`curl http://127.0.0.1:${settings.apiPort}/v1/chat/completions \\
   -H "Content-Type: application/json" \\
   -d '{"model":"qwen2.5:7b","messages":[{"role":"user","content":"hi"}]}'`}</pre>
         </Block>
@@ -95,26 +92,22 @@ export function SettingsView() {
         <Block title="Data">
           <button
             onClick={() => {
-              if (confirm("Reset Casium to factory defaults?")) store.reset();
+              if (confirm("Reset Casium?")) store.reset();
             }}
-            className="rounded-xl border border-rose-400/30 px-3 py-2 text-sm text-rose-300"
+            className="btn btn-danger"
           >
             Reset local state
           </button>
         </Block>
-
-        <p className="mt-8 text-center font-mono text-[11px] text-white/25">
-          Casium AI · models stay on your machine · v1.0
-        </p>
       </div>
     </div>
   );
 }
 
-function Block({ title, children }: { title: string; children: React.ReactNode }) {
+function Block({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="mt-6 rounded-2xl border border-white/[0.07] bg-ink-800/40 p-5">
-      <div className="mb-3 text-[11px] uppercase tracking-[0.18em] text-white/35">{title}</div>
+    <section className="mb-8">
+      <div className="mb-3 text-[12px] font-medium text-mute">{title}</div>
       {children}
     </section>
   );
@@ -122,8 +115,8 @@ function Block({ title, children }: { title: string; children: React.ReactNode }
 
 function Row({ k, v }: { k: string; v: string }) {
   return (
-    <div className="rounded-xl border border-white/[0.06] px-3 py-2">
-      <div className="text-[10px] uppercase tracking-wider text-white/35">{k}</div>
+    <div className="bg-panel px-3 py-2">
+      <div className="text-[11px] text-faint">{k}</div>
       <div>{v}</div>
     </div>
   );
@@ -146,9 +139,9 @@ function Slider({
 }) {
   return (
     <label className="mb-3 block">
-      <div className="mb-1 flex justify-between text-[12px] text-white/50">
+      <div className="mb-1 flex justify-between text-[12px] text-mute">
         <span>{label}</span>
-        <span className="font-mono text-white/70">{value}</span>
+        <span className="font-mono text-fg">{value}</span>
       </div>
       <input
         type="range"
@@ -157,7 +150,7 @@ function Slider({
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full accent-casium"
+        className="w-full accent-white"
       />
     </label>
   );

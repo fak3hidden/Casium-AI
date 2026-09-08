@@ -1,12 +1,5 @@
-import { useState, type ReactNode } from "react";
-import {
-  FolderGit2,
-  Github,
-  Plug,
-  Plus,
-  Trash2,
-  Unplug,
-} from "lucide-react";
+import { useState } from "react";
+import { Plus, Trash2 } from "lucide-react";
 import clsx from "clsx";
 import { MCP_PRESETS } from "../lib/presets";
 import { uid } from "../lib/engine";
@@ -23,119 +16,116 @@ export function ConnectionsView() {
   const [mcpOpen, setMcpOpen] = useState(false);
 
   return (
-    <div className="min-h-0 flex-1 overflow-y-auto p-6">
-      <div className="mb-6">
-        <div className="font-serif text-3xl italic">Connections</div>
-        <p className="mt-1 max-w-2xl text-sm text-white/45">
-          Give local models eyes on your work. Attach VS Code folders, GitHub repos, and MCP
-          servers — the same protocol Cursor and Claude use for tools.
+    <div className="min-h-0 flex-1 overflow-y-auto">
+      <div className="border-b border-line px-4 py-3">
+        <h1 className="text-[15px] font-medium">Connections</h1>
+        <p className="mt-0.5 text-[12px] text-mute">
+          VS folders, GitHub repos, and MCP servers attached to chat.
         </p>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-2">
-        <section className="rounded-2xl border border-white/[0.07] bg-ink-800/40 p-5">
-          <Header icon={<Github size={16} />} title="GitHub" hint="Repos the model may read" />
-          {github.connected ? (
-            <div>
-              <div className="mb-3 flex items-center justify-between text-sm">
-                <span className="text-white/70">
-                  Signed in as <span className="text-white">{github.username}</span>
-                </span>
-                <button className="text-[12px] text-white/40 hover:text-white" onClick={store.disconnectGithub}>
-                  Disconnect
-                </button>
-              </div>
-              <div className="space-y-2">
-                {github.repos.map((r) => (
-                  <label
-                    key={r.id}
-                    className="flex cursor-pointer items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-2.5"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={r.attached}
-                      onChange={() => store.toggleRepo(r.id)}
-                      className="accent-casium"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <div className="truncate text-sm text-white">{r.fullName}</div>
-                      <div className="truncate text-[11px] text-white/40">{r.description}</div>
-                    </div>
-                    <span className="font-mono text-[10px] text-white/30">{r.language}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              <input
-                className="field"
-                placeholder="GitHub username"
-                value={user}
-                onChange={(e) => setUser(e.target.value)}
-              />
-              <input
-                className="field"
-                placeholder="Personal access token (stored only on this device)"
-                type="password"
-                value={token}
-                onChange={(e) => setToken(e.target.value)}
-              />
-              <button
-                onClick={() => store.connectGithub(user || "you", token)}
-                className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-ink-950"
-              >
-                Connect GitHub
+      <section className="border-b border-line px-4 py-4">
+        <div className="mb-3 text-[12px] font-medium text-mute">GitHub</div>
+        {github.connected ? (
+          <>
+            <div className="mb-2 flex items-center justify-between text-[13px]">
+              <span className="text-mute">
+                Signed in as <span className="text-fg">{github.username}</span>
+              </span>
+              <button className="text-[12px] text-mute hover:text-fg" onClick={store.disconnectGithub}>
+                Disconnect
               </button>
-              <p className="text-[11px] text-white/30">
-                Demo mode lists sample repos if the token isn’t used. A real token stays in
-                localStorage and never leaves the browser.
-              </p>
             </div>
-          )}
-        </section>
+            <table className="data">
+              <thead>
+                <tr>
+                  <th className="w-8" />
+                  <th>Repo</th>
+                  <th>Language</th>
+                </tr>
+              </thead>
+              <tbody>
+                {github.repos.map((r) => (
+                  <tr key={r.id} onClick={() => store.toggleRepo(r.id)}>
+                    <td>
+                      <input type="checkbox" checked={r.attached} readOnly className="accent-white" />
+                    </td>
+                    <td>
+                      <div>{r.fullName}</div>
+                      <div className="text-[12px] text-mute">{r.description}</div>
+                    </td>
+                    <td className="font-mono text-[12px] text-mute">{r.language}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        ) : (
+          <div className="flex max-w-lg flex-col gap-2">
+            <input className="field" placeholder="Username" value={user} onChange={(e) => setUser(e.target.value)} />
+            <input
+              className="field"
+              placeholder="Personal access token (this device only)"
+              type="password"
+              value={token}
+              onChange={(e) => setToken(e.target.value)}
+            />
+            <div>
+              <button onClick={() => store.connectGithub(user || "you", token)} className="btn btn-primary">
+                Connect
+              </button>
+            </div>
+            <p className="text-[12px] text-faint">Without a token, sample repos are listed for the UI.</p>
+          </div>
+        )}
+      </section>
 
-        <section className="rounded-2xl border border-white/[0.07] bg-ink-800/40 p-5">
-          <Header icon={<FolderGit2 size={16} />} title="VS / local projects" hint="Workspace folders" />
-          <div className="space-y-2">
+      <section className="border-b border-line px-4 py-4">
+        <div className="mb-3 text-[12px] font-medium text-mute">VS / local projects</div>
+        <table className="data">
+          <thead>
+            <tr>
+              <th className="w-8" />
+              <th>Name</th>
+              <th>Path</th>
+              <th>Files</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
             {projects.map((p) => (
-              <div
-                key={p.id}
-                className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-2.5"
-              >
-                <input
-                  type="checkbox"
-                  checked={p.attached}
-                  onChange={() => store.toggleProject(p.id)}
-                  className="accent-casium"
-                />
-                <div className="min-w-0 flex-1">
-                  <div className="text-sm text-white">{p.name}</div>
-                  <div className="truncate font-mono text-[11px] text-white/35">{p.path}</div>
-                </div>
-                <span className="font-mono text-[10px] text-white/30">{p.files} files</span>
-                <button onClick={() => store.removeProject(p.id)} className="text-white/30 hover:text-rose-400">
-                  <Trash2 size={14} />
-                </button>
-              </div>
+              <tr key={p.id} onClick={() => store.toggleProject(p.id)}>
+                <td>
+                  <input type="checkbox" checked={p.attached} readOnly className="accent-white" />
+                </td>
+                <td>{p.name}</td>
+                <td className="font-mono text-[12px] text-mute">{p.path}</td>
+                <td className="font-mono text-[12px] text-mute">{p.files}</td>
+                <td>
+                  <button
+                    className="icon-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      store.removeProject(p.id);
+                    }}
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                </td>
+              </tr>
             ))}
-          </div>
-          <div className="mt-3 grid grid-cols-2 gap-2">
-            <input
-              className="field"
-              placeholder="Project name"
-              value={projName}
-              onChange={(e) => setProjName(e.target.value)}
-            />
-            <input
-              className="field"
-              placeholder="/path/to/vscode/project"
-              value={projPath}
-              onChange={(e) => setProjPath(e.target.value)}
-            />
-          </div>
+          </tbody>
+        </table>
+        <div className="mt-3 flex max-w-lg gap-2">
+          <input className="field" placeholder="Name" value={projName} onChange={(e) => setProjName(e.target.value)} />
+          <input
+            className="field"
+            placeholder="/path/to/project"
+            value={projPath}
+            onChange={(e) => setProjPath(e.target.value)}
+          />
           <button
-            className="mt-2 flex items-center gap-1 text-sm text-casium"
+            className="btn btn-ghost shrink-0"
             onClick={() => {
               if (!projName && !projPath) return;
               store.addProject({
@@ -152,87 +142,60 @@ export function ConnectionsView() {
               setProjPath("");
             }}
           >
-            <Plus size={14} /> Add folder
-          </button>
-        </section>
-      </div>
-
-      <section className="mt-4 rounded-2xl border border-white/[0.07] bg-ink-800/40 p-5">
-        <div className="mb-4 flex items-center justify-between">
-          <Header icon={<Plug size={16} />} title="MCP servers" hint="Model Context Protocol" />
-          <button
-            onClick={() => setMcpOpen(true)}
-            className="flex items-center gap-1 rounded-xl bg-casium px-3 py-2 text-sm font-semibold text-ink-950"
-          >
-            <Plus size={14} /> Add server
+            <Plus size={14} />
+            Add
           </button>
         </div>
+      </section>
 
-        <div className="grid gap-3 md:grid-cols-2">
-          {mcp.map((s) => (
-            <div key={s.id} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <div className="font-medium text-white">{s.name}</div>
-                  <div className="text-[12px] text-white/40">{s.description}</div>
-                </div>
-                <button
-                  onClick={() => store.toggleMcp(s.id)}
-                  className={clsx(
-                    "flex items-center gap-1 rounded-full border px-2 py-1 text-[11px]",
-                    s.enabled
-                      ? "border-casium/30 bg-casium/10 text-casium"
-                      : "border-white/10 text-white/40",
-                  )}
-                >
-                  {s.enabled ? <Plug size={11} /> : <Unplug size={11} />}
-                  {s.status}
-                </button>
-              </div>
-              <div className="mt-2 font-mono text-[11px] text-white/35">
-                {s.transport} · {s.command} {s.args}
-              </div>
-              <div className="mt-2 flex flex-wrap gap-1">
-                {s.tools.map((t) => (
-                  <span key={t} className="rounded-md bg-white/[0.05] px-1.5 py-0.5 font-mono text-[10px] text-white/50">
-                    {t}
-                  </span>
-                ))}
-              </div>
-              <button
-                onClick={() => store.removeMcp(s.id)}
-                className="mt-3 text-[11px] text-white/30 hover:text-rose-400"
-              >
-                Remove
-              </button>
-            </div>
-          ))}
+      <section className="px-4 py-4">
+        <div className="mb-3 flex items-center justify-between">
+          <div className="text-[12px] font-medium text-mute">MCP servers</div>
+          <button onClick={() => setMcpOpen(true)} className="btn btn-ghost h-7 text-[12px]">
+            <Plus size={13} /> Add
+          </button>
         </div>
-
+        <table className="data">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Transport</th>
+              <th>Command</th>
+              <th>Status</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {mcp.map((s) => (
+              <tr key={s.id} onClick={() => store.toggleMcp(s.id)}>
+                <td>
+                  <div>{s.name}</div>
+                  <div className="text-[12px] text-mute">{s.description}</div>
+                </td>
+                <td className="font-mono text-[12px] text-mute">{s.transport}</td>
+                <td className="max-w-[280px] truncate font-mono text-[11px] text-faint">
+                  {s.command} {s.args}
+                </td>
+                <td>
+                  <span className={clsx("text-[12px]", s.enabled ? "text-fg" : "text-faint")}>{s.status}</span>
+                </td>
+                <td>
+                  <button
+                    className="icon-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      store.removeMcp(s.id);
+                    }}
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         {mcpOpen && <McpModal onClose={() => setMcpOpen(false)} />}
       </section>
-    </div>
-  );
-}
-
-function Header({
-  icon,
-  title,
-  hint,
-}: {
-  icon: ReactNode;
-  title: string;
-  hint: string;
-}) {
-  return (
-    <div className="mb-4 flex items-center gap-3">
-      <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-casium">
-        {icon}
-      </div>
-      <div>
-        <div className="font-medium text-white">{title}</div>
-        <div className="text-[11px] text-white/35">{hint}</div>
-      </div>
     </div>
   );
 }
@@ -278,33 +241,30 @@ function McpModal({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
-      <div
-        className="w-full max-w-lg rounded-2xl border border-white/10 bg-ink-800 p-5 shadow-panel"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="font-serif text-2xl italic">Add MCP server</div>
-        <div className="mt-3 flex flex-wrap gap-1.5">
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 p-4" onClick={onClose}>
+      <div className="w-full max-w-md border border-line bg-panel p-4" onClick={(e) => e.stopPropagation()}>
+        <div className="text-[15px] font-medium">Add MCP server</div>
+        <div className="mt-3 flex flex-wrap gap-1">
           {MCP_PRESETS.map((p) => (
             <button
               key={p.name}
               onClick={() => applyPreset(p)}
-              className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-white/60 hover:border-casium/40 hover:text-white"
+              className="h-6 border border-line px-2 text-[12px] text-mute hover:text-fg"
             >
               {p.name}
             </button>
           ))}
         </div>
-        <div className="mt-4 space-y-2">
+        <div className="mt-3 space-y-2">
           <input className="field" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-1">
             {(["stdio", "sse", "http"] as McpTransport[]).map((t) => (
               <button
                 key={t}
                 onClick={() => setTransport(t)}
                 className={clsx(
-                  "rounded-xl border py-2 text-sm",
-                  transport === t ? "border-casium/40 bg-casium/10 text-casium" : "border-white/10 text-white/50",
+                  "h-8 border text-[13px]",
+                  transport === t ? "border-fg bg-raised text-fg" : "border-line text-mute",
                 )}
               >
                 {t}
@@ -317,21 +277,21 @@ function McpModal({ onClose }: { onClose: () => void }) {
               <input className="field" placeholder="Args" value={args} onChange={(e) => setArgs(e.target.value)} />
             </>
           ) : (
-            <input className="field" placeholder="https://…" value={url} onChange={(e) => setUrl(e.target.value)} />
+            <input className="field" placeholder="https://" value={url} onChange={(e) => setUrl(e.target.value)} />
           )}
           <input className="field" placeholder="ENV KEY=value" value={env} onChange={(e) => setEnv(e.target.value)} />
           <input
             className="field"
-            placeholder="What this server is for"
+            placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
         <div className="mt-4 flex justify-end gap-2">
-          <button onClick={onClose} className="px-3 py-2 text-sm text-white/50">
+          <button onClick={onClose} className="btn btn-ghost">
             Cancel
           </button>
-          <button onClick={save} className="rounded-xl bg-casium px-4 py-2 text-sm font-semibold text-ink-950">
+          <button onClick={save} className="btn btn-primary">
             Connect
           </button>
         </div>

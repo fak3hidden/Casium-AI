@@ -1,10 +1,10 @@
 import clsx from "clsx";
 import {
-  BookOpen,
   Box,
   Compass,
   Link2,
-  MessageSquarePlus,
+  MessageSquare,
+  Plus,
   ScrollText,
   Settings,
 } from "lucide-react";
@@ -12,9 +12,9 @@ import { useStore } from "../lib/useStore";
 import type { View } from "../lib/types";
 
 const NAV: { id: View; label: string; icon: typeof Compass }[] = [
-  { id: "chat", label: "Chat", icon: MessageSquarePlus },
+  { id: "chat", label: "Chat", icon: MessageSquare },
   { id: "library", label: "Library", icon: Box },
-  { id: "browse", label: "Browse AIs", icon: Compass },
+  { id: "browse", label: "Browse", icon: Compass },
   { id: "connections", label: "Connections", icon: Link2 },
   { id: "prompts", label: "Prompts", icon: ScrollText },
   { id: "settings", label: "Settings", icon: Settings },
@@ -22,80 +22,53 @@ const NAV: { id: View; label: string; icon: typeof Compass }[] = [
 
 export function Sidebar() {
   const store = useStore();
-  const { view, installed, mcp, conversations } = store.state;
+  const { view, installed, mcp } = store.state;
   const ready = installed.filter((i) => i.status === "ready").length;
   const liveMcp = mcp.filter((m) => m.enabled).length;
 
   return (
-    <aside className="flex w-[72px] shrink-0 flex-col items-center border-r border-white/[0.06] bg-ink-900/90 py-4 lg:w-[232px] lg:items-stretch lg:px-3">
-      <div className="mb-6 flex items-center gap-3 px-1 lg:px-2">
-        <img
-          src="/logo.png"
-          alt="Casium"
-          className="h-10 w-10 rounded-xl ring-1 ring-white/10"
-        />
-        <div className="hidden lg:block">
-          <div className="font-serif text-lg leading-none text-white">Casium</div>
-          <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.22em] text-casium/70">
-            Local AI
-          </div>
-        </div>
+    <aside className="flex w-[200px] shrink-0 flex-col border-r border-line bg-panel">
+      <div className="flex h-11 items-center gap-2 px-3">
+        <span className="flex h-[18px] w-[18px] items-center justify-center rounded-[4px] bg-fg text-[11px] font-semibold text-bg">
+          C
+        </span>
+        <span className="text-[13px] font-medium">Casium</span>
       </div>
 
-      <nav className="flex flex-1 flex-col gap-1">
+      <div className="px-2 pb-2">
+        <button onClick={() => store.newChat()} className="btn btn-primary w-full">
+          <Plus size={14} />
+          New chat
+        </button>
+      </div>
+
+      <nav className="flex flex-1 flex-col gap-px px-2">
         {NAV.map((item) => {
           const Icon = item.icon;
           const active = view === item.id;
           const badge =
-            item.id === "library"
-              ? ready
-              : item.id === "connections"
-                ? liveMcp
-                : item.id === "chat"
-                  ? conversations.length
-                  : null;
+            item.id === "library" ? ready : item.id === "connections" ? liveMcp : null;
           return (
             <button
               key={item.id}
               onClick={() => store.setView(item.id)}
               className={clsx(
-                "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition",
-                active
-                  ? "bg-white/[0.06] text-white shadow-inner"
-                  : "text-white/50 hover:bg-white/[0.03] hover:text-white/80",
+                "flex h-8 items-center gap-2 rounded-md px-2 text-[13px]",
+                active ? "bg-raised text-fg" : "text-mute hover:bg-raised/60 hover:text-fg",
               )}
             >
-              {active && (
-                <span className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-casium lg:left-1" />
-              )}
-              <Icon size={18} strokeWidth={1.7} />
-              <span className="hidden flex-1 text-left lg:block">{item.label}</span>
-              {badge != null && (
-                <span className="hidden font-mono text-[10px] text-white/30 lg:block">
-                  {badge}
-                </span>
+              <Icon size={15} strokeWidth={1.75} />
+              <span className="flex-1 text-left">{item.label}</span>
+              {badge != null && badge > 0 && (
+                <span className="font-mono text-[11px] text-faint">{badge}</span>
               )}
             </button>
           );
         })}
       </nav>
 
-      <button
-        onClick={() => store.newChat()}
-        className="mt-3 hidden items-center justify-center gap-2 rounded-xl bg-casium px-3 py-2.5 text-sm font-semibold text-ink-950 transition hover:brightness-110 lg:flex"
-      >
-        <MessageSquarePlus size={16} />
-        New chat
-      </button>
-
-      <div className="mt-4 hidden rounded-xl border border-white/[0.06] bg-white/[0.03] p-3 lg:block">
-        <div className="flex items-center gap-2 text-[11px] text-white/45">
-          <BookOpen size={12} />
-          OpenAI-compatible
-        </div>
-        <div className="mt-1 truncate font-mono text-[11px] text-casium/80">
-          127.0.0.1:{store.state.settings.apiPort}/v1
-        </div>
+      <div className="border-t border-line px-3 py-2.5 font-mono text-[11px] text-faint">
+        127.0.0.1:{store.state.settings.apiPort}/v1
       </div>
     </aside>
   );

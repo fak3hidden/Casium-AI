@@ -13,11 +13,9 @@ export default function App() {
   const view = store.state.view;
 
   return (
-    <div className="relative flex h-full bg-ink-950 text-white">
-      <div className="aurora" />
-      <div className="noise" />
+    <div className="flex h-full bg-bg text-fg">
       <Sidebar />
-      <div className="relative z-[1] flex min-w-0 flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col">
         {store.state.settings.showHardwareBar && <HardwareBar />}
         {view === "chat" && <ChatView />}
         {view === "library" && <LibraryView />}
