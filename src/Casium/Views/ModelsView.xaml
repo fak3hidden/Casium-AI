@@ -32,7 +32,7 @@
                                        FontSize="11.5"
                                        Foreground="{DynamicResource Brush.Text.Muted}"
                                        VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Modified, StringFormat='{}{0:MMM d, yyyy}}'"
+                            <TextBlock Text="{Binding Modified, StringFormat='{}{0:d MMM yyyy}}'"
                                        Style="{StaticResource Txt.Muted}"
                                        VerticalAlignment="Center"
                                        Margin="7,0,0,0"/>
