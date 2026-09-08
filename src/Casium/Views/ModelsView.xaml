@@ -32,13 +32,13 @@
                                        FontSize="11.5"
                                        Foreground="{DynamicResource Brush.Text.Muted}"
                                        VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Modified, StringFormat='{}{0:d MMM yyyy}}'"
+                            <TextBlock Text="{Binding ModifiedText}"
                                        Style="{StaticResource Txt.Muted}"
                                        VerticalAlignment="Center"
                                        Margin="7,0,0,0"/>
                             <TextBlock Text="·" Style="{StaticResource Txt.Muted}"
                                        VerticalAlignment="Center" Margin="10,0,10,0"/>
-                            <TextBlock Text="{Binding SizeBytes, StringFormat='{}{0:N0} bytes on disk'}"
+                            <TextBlock Text="{Binding SizeText}"
                                        Style="{StaticResource Txt.Muted}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </StackPanel>

@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -24,6 +25,13 @@ public sealed class OllamaModel
 
     public string BaseName => Name.Contains(':') ? Name[..Name.IndexOf(':')] : Name;
     public double SizeGB => SizeBytes / 1024.0 / 1024 / 1024;
+
+    /// <summary>Precomputed display strings — keeps culture/format handling out of XAML.</summary>
+    public string ModifiedText =>
+        Modified == default ? "" : Modified.ToString("d MMM yyyy", CultureInfo.InvariantCulture);
+
+    public string SizeText =>
+        SizeBytes <= 0 ? "" : SizeBytes.ToString("N0", CultureInfo.InvariantCulture) + " bytes on disk";
 
     /// <summary>Compact "8B · Q4_K_M · 4.9 GB" line for combo boxes and cards.</summary>
     public string DisplayInfo
