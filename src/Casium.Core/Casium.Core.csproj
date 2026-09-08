@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>Casium.Core</RootNamespace>
+    <Description>Core logic for the Casium local AI studio: engine client, MCP, model catalog, hardware detection and compatibility estimation.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Catalog/catalog.json" />
+  </ItemGroup>
+
+</Project>

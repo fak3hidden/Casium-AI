@@ -1,0 +1,269 @@
+<UserControl x:Class="Casium.Views.BrowseView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:Casium.Controls"
+             xmlns:views="clr-namespace:Casium.Views">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="VariantRowTemplate" DataType="{x:Type views:VariantRow}">
+            <Border Padding="12,9" MinHeight="46">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Label}"
+                                   Style="{StaticResource Txt.H3}"
+                                   FontFamily="{StaticResource Font.Mono}"/>
+                        <controls:Pill Text="{Binding Tag}" Kind="Neutral" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding SizeGB, StringFormat='{}{0:0.0##} GB'}"
+                               Style="{StaticResource Txt.BodySecondary}"
+                               VerticalAlignment="Center"
+                               Margin="16,0,16,0"/>
+                    <controls:Pill x:Name="Verdict"
+                                   Grid.Column="2"
+                                   Text="{Binding VerdictLabel}"
+                                   Kind="{Binding VerdictKind}"
+                                   VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid Margin="24,18,24,18">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ============================== left: catalog list ============================== -->
+
+        <Grid Grid.Column="0" Margin="0,0,20,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBox x:Name="Search"
+                     Grid.Row="0"
+                     Tag="Search models, publishers, capabilities…"
+                     TextChanged="Search_TextChanged"/>
+
+            <WrapPanel Grid.Row="1" Margin="0,10,0,0" x:Name="CategoryChips"/>
+
+            <ListBox x:Name="CatalogList"
+                     Grid.Row="2"
+                     Margin="0,12,0,0"
+                     SelectionChanged="CatalogList_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="12,11" Margin="0,0,0,8">
+                            <StackPanel>
+                                <Grid>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}"
+                                                   Style="{StaticResource Txt.H3}"/>
+                                        <controls:Pill Text="{Binding InstalledLabel}"
+                                                       Kind="Success"
+                                                       Margin="10,0,0,0"
+                                                       VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding ParamsRange}"
+                                               FontFamily="{StaticResource Font.Mono}"
+                                               FontSize="12"
+                                               Foreground="{DynamicResource Brush.Text.Muted}"
+                                               HorizontalAlignment="Right"
+                                               VerticalAlignment="Center"/>
+                                </Grid>
+                                <TextBlock Text="{Binding Publisher}"
+                                           Style="{StaticResource Txt.Muted}"
+                                           Margin="0,3,0,0"/>
+                                <TextBlock Text="{Binding Description}"
+                                           Style="{StaticResource Txt.BodySecondary}"
+                                           FontSize="12"
+                                           TextWrapping="Wrap"
+                                           MaxHeight="52"
+                                           TextTrimming="CharacterEllipsis"
+                                           Margin="0,6,0,0"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <controls:Pill Text="{Binding Category}" Kind="Neutral"/>
+                                    <ItemsControl ItemsSource="{Binding Capabilities}" Margin="8,0,0,0">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <controls:Pill Text="{Binding}" Kind="Accent" Margin="6,0,0,0"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+
+        <!-- ============================== right: detail ============================== -->
+
+        <Grid Grid.Column="1">
+            <!-- nothing selected -->
+            <StackPanel x:Name="EmptyDetail"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <TextBlock Text="&#xE719;"
+                           FontFamily="{StaticResource Font.Icons}"
+                           FontSize="34"
+                           Foreground="{DynamicResource Brush.Text.Muted}"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Text="Pick a model to see if your PC can run it"
+                           Style="{StaticResource Txt.BodySecondary}"
+                           HorizontalAlignment="Center"
+                           Margin="0,14,0,0"/>
+            </StackPanel>
+
+            <ScrollViewer x:Name="DetailScroll" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                <StackPanel Margin="4,0,8,0">
+
+                    <!-- hero -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock x:Name="DetailName" Style="{StaticResource Txt.H1}"/>
+                            <TextBlock x:Name="DetailPublisher" Style="{StaticResource Txt.Caption}" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <Button x:Name="DetailLink"
+                                Grid.Column="1"
+                                Style="{StaticResource Btn.Link}"
+                                VerticalAlignment="Top"
+                                Click="DetailLink_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="View on Ollama" TextDecorations="Underline"/>
+                                <TextBlock Text="&#xE8A7;"
+                                           FontFamily="{StaticResource Font.Icons}"
+                                           FontSize="11"
+                                           Margin="6,1,0,0"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
+                    <WrapPanel x:Name="DetailPills" Margin="0,12,0,0"/>
+
+                    <TextBlock x:Name="DetailDescription"
+                               Style="{StaticResource Txt.BodySecondary}"
+                               TextWrapping="Wrap"
+                               Margin="0,14,0,0"/>
+
+                    <!-- sizes -->
+                    <TextBlock Text="Choose a size"
+                               Style="{StaticResource Txt.H2}"
+                               Margin="0,26,0,10"/>
+                    <ListBox x:Name="Variants"
+                             ItemTemplate="{StaticResource VariantRowTemplate}"
+                             SelectionChanged="Variants_SelectionChanged"/>
+
+                    <!-- compatibility -->
+                    <TextBlock Text="Can you run it?"
+                               Style="{StaticResource Txt.H2}"
+                               Margin="0,26,0,0"/>
+                    <Border Style="{StaticResource Card}" Margin="0,10,0,0" Padding="18">
+                        <StackPanel>
+                            <Grid>
+                                <TextBlock x:Name="VerdictTitle"
+                                           Style="{StaticResource Txt.H3}"
+                                           VerticalAlignment="Center"/>
+                                <controls:Pill x:Name="VerdictPill"
+                                               HorizontalAlignment="Right"
+                                               VerticalAlignment="Center"/>
+                            </Grid>
+                            <TextBlock x:Name="VerdictSummary"
+                                       Style="{StaticResource Txt.BodySecondary}"
+                                       TextWrapping="Wrap"
+                                       Margin="0,8,0,0"/>
+
+                            <Separator Margin="0,16,0,14"/>
+
+                            <TextBlock x:Name="HardwareLine"
+                                       Style="{StaticResource Txt.Muted}"
+                                       TextWrapping="Wrap"/>
+
+                            <controls:UsageBar x:Name="RamBar" Margin="0,14,0,0"/>
+                            <controls:UsageBar x:Name="VramBar" Margin="0,12,0,0"/>
+
+                            <Grid Margin="0,16,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock Text="RUNS ON" Style="{StaticResource Txt.Muted}"/>
+                                    <TextBlock x:Name="ModeText"
+                                               Style="{StaticResource Txt.Body}"
+                                               FontWeight="SemiBold"
+                                               Margin="0,3,0,0"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                                    <TextBlock Text="ESTIMATED SPEED" Style="{StaticResource Txt.Muted}"
+                                               HorizontalAlignment="Right"/>
+                                    <TextBlock x:Name="SpeedText"
+                                               FontFamily="{StaticResource Font.Display}"
+                                               FontSize="19" FontWeight="SemiBold"
+                                               Foreground="{DynamicResource Brush.Accent}"
+                                               HorizontalAlignment="Right"
+                                               Margin="0,3,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- download -->
+                    <Grid Margin="0,18,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="DownloadHint"
+                                   Style="{StaticResource Txt.Muted}"
+                                   TextWrapping="Wrap"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,16,0"/>
+                        <Button x:Name="DownloadButton"
+                                Grid.Column="1"
+                                Style="{StaticResource Btn.Primary}"
+                                MinWidth="200"
+                                Click="Download_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="DownloadGlyph"
+                                           Text="&#xE896;"
+                                           FontFamily="{StaticResource Font.Icons}"
+                                           FontSize="13" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="DownloadLabel"
+                                           Text="Download"
+                                           VerticalAlignment="Center"
+                                           Margin="8,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
+                    <TextBlock x:Name="EstimateDisclaimer"
+                               Style="{StaticResource Txt.Muted}"
+                               TextWrapping="Wrap"
+                               Text="Estimates assume the default quantization and an 8k context window. Actual performance depends on your exact setup — treat them as guidance, not benchmarks."
+                               Margin="0,16,0,8"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

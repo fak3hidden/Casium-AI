@@ -1,0 +1,17 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Accent "Violet" (default). Soft/Border variants use alpha so they adapt to any palette. -->
+
+    <SolidColorBrush x:Key="Brush.Accent" Color="#7C6DF2"/>
+    <SolidColorBrush x:Key="Brush.Accent.Hover" Color="#8F82F6"/>
+    <SolidColorBrush x:Key="Brush.Accent.Press" Color="#695BDF"/>
+    <SolidColorBrush x:Key="Brush.Accent.Soft" Color="#2E7C6DF2"/>
+    <SolidColorBrush x:Key="Brush.Accent.Softer" Color="#1A7C6DF2"/>
+    <SolidColorBrush x:Key="Brush.Accent.Border" Color="#527C6DF2"/>
+    <SolidColorBrush x:Key="Brush.Text.OnAccent" Color="#FFFFFF"/>
+
+    <SolidColorBrush x:Key="Brush.UserBubble.Bg" Color="#217C6DF2"/>
+    <SolidColorBrush x:Key="Brush.UserBubble.Border" Color="#407C6DF2"/>
+
+</ResourceDictionary>

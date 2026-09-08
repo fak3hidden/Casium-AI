@@ -1,0 +1,326 @@
+{
+  "models": [
+    {
+      "id": "llama3.2",
+      "name": "Llama 3.2",
+      "publisher": "Meta",
+      "category": "General",
+      "description": "Meta's compact flagship built for on-device use. Punchy instruction following and tool calling with a 128k context window — the sweet spot for most local setups.",
+      "license": "Llama 3.2 Community",
+      "context": "128k context",
+      "capabilities": ["tools"],
+      "variants": [
+        { "tag": "llama3.2:1b", "label": "1B", "paramsB": 1.24, "sizeGB": 1.3, "isDefault": false },
+        { "tag": "llama3.2:3b", "label": "3B", "paramsB": 3.21, "sizeGB": 2.0, "isDefault": true }
+      ]
+    },
+    {
+      "id": "llama3.1",
+      "name": "Llama 3.1",
+      "publisher": "Meta",
+      "category": "General",
+      "description": "Meta's workhorse Llama 3 family with a long 128k context and reliable tool calling. The 8B is the classic 'daily driver' local model.",
+      "license": "Llama 3.1 Community",
+      "context": "128k context",
+      "capabilities": ["tools"],
+      "variants": [
+        { "tag": "llama3.1:8b", "label": "8B", "paramsB": 8.03, "sizeGB": 4.9, "isDefault": true },
+        { "tag": "llama3.1:70b", "label": "70B", "paramsB": 70.6, "sizeGB": 42.5, "isDefault": false },
+        { "tag": "llama3.1:405b", "label": "405B", "paramsB": 405.0, "sizeGB": 231.0, "isDefault": false }
+      ]
+    },
+    {
+      "id": "llama3.3",
+      "name": "Llama 3.3",
+      "publisher": "Meta",
+      "category": "General",
+      "description": "Llama 3.3 70B matches much of Llama 3.1 405B's quality at a fraction of the size — Meta's strongest dense model for high-RAM workstations.",
+      "license": "Llama 3.3 Community",
+      "context": "128k context",
+      "capabilities": ["tools"],
+      "variants": [
+        { "tag": "llama3.3:70b", "label": "70B", "paramsB": 70.6, "sizeGB": 43.0, "isDefault": true }
+      ]
+    },
+    {
+      "id": "qwen3",
+      "name": "Qwen3",
+      "publisher": "Alibaba",
+      "category": "General",
+      "description": "Alibaba's hybrid-thinking family: a toggleable reasoning mode, strong tool calling and 30+ language support. Excellent all-rounder from tiny to big.",
+      "license": "Apache 2.0",
+      "context": "32k–128k context",
+      "capabilities": ["tools", "reasoning"],
+      "variants": [
+        { "tag": "qwen3:0.6b", "label": "0.6B", "paramsB": 0.6, "sizeGB": 0.5, "isDefault": false },
+        { "tag": "qwen3:1.7b", "label": "1.7B", "paramsB": 1.7, "sizeGB": 1.4, "isDefault": false },
+        { "tag": "qwen3:4b", "label": "4B", "paramsB": 4.0, "sizeGB": 2.6, "isDefault": true },
+        { "tag": "qwen3:8b", "label": "8B", "paramsB": 8.2, "sizeGB": 5.2, "isDefault": false },
+        { "tag": "qwen3:14b", "label": "14B", "paramsB": 14.8, "sizeGB": 9.3, "isDefault": false },
+        { "tag": "qwen3:32b", "label": "32B", "paramsB": 32.8, "sizeGB": 20.0, "isDefault": false }
+      ]
+    },
+    {
+      "id": "qwen2.5",
+      "name": "Qwen 2.5",
+      "publisher": "Alibaba",
+      "category": "General",
+      "description": "The dependable previous-generation Qwen with solid instruction following, math and structured output across 29 languages.",
+      "license": "Qwen Research",
+      "context": "32k–128k context",
+      "capabilities": ["tools"],
+      "variants": [
+        { "tag": "qwen2.5:0.5b", "label": "0.5B", "paramsB": 0.5, "sizeGB": 0.4, "isDefault": false },
+        { "tag": "qwen2.5:1.5b", "label": "1.5B", "paramsB": 1.5, "sizeGB": 1.0, "isDefault": false },
+        { "tag": "qwen2.5:3b", "label": "3B", "paramsB": 3.1, "sizeGB": 1.9, "isDefault": true },
+        { "tag": "qwen2.5:7b", "label": "7B", "paramsB": 7.6, "sizeGB": 4.7, "isDefault": false },
+        { "tag": "qwen2.5:14b", "label": "14B", "paramsB": 14.8, "sizeGB": 9.0, "isDefault": false },
+        { "tag": "qwen2.5:32b", "label": "32B", "paramsB": 32.8, "sizeGB": 20.0, "isDefault": false },
+        { "tag": "qwen2.5:72b", "label": "72B", "paramsB": 72.7, "sizeGB": 47.0, "isDefault": false }
+      ]
+    },
+    {
+      "id": "qwen2.5-coder",
+      "name": "Qwen 2.5 Coder",
+      "publisher": "Alibaba",
+      "category": "Coding",
+      "description": "Purpose-built code model: fast fill-in-the-middle, code repair and repo-level reasoning. Pair it with the Project folder MCP server for your VS solutions.",
+      "license": "Qwen Research",
+      "context": "32k+ context",
+      "capabilities": ["coding", "tools"],
+      "variants": [
+        { "tag": "qwen2.5-coder:1.5b", "label": "1.5B", "paramsB": 1.5, "sizeGB": 1.0, "isDefault": false },
+        { "tag": "qwen2.5-coder:7b", "label": "7B", "paramsB": 7.6, "sizeGB": 4.7, "isDefault": true },
+        { "tag": "qwen2.5-coder:14b", "label": "14B", "paramsB": 14.8, "sizeGB": 9.0, "isDefault": false },
+        { "tag": "qwen2.5-coder:32b", "label": "32B", "paramsB": 32.8, "sizeGB": 20.0, "isDefault": false }
+      ]
+    },
+    {
+      "id": "deepseek-r1",
+      "name": "DeepSeek-R1",
+      "publisher": "DeepSeek",
+      "category": "Reasoning",
+      "description": "Open reasoning model that 'thinks' before answering — strong at math, logic and step-by-step analysis. Distilled versions run well on consumer hardware.",
+      "license": "MIT",
+      "context": "32k–128k context",
+      "capabilities": ["reasoning", "tools"],
+      "variants": [
+        { "tag": "deepseek-r1:1.5b", "label": "1.5B", "paramsB": 1.5, "sizeGB": 1.1, "isDefault": false },
+        { "tag": "deepseek-r1:7b", "label": "7B", "paramsB": 7.6, "sizeGB": 4.7, "isDefault": true },
+        { "tag": "deepseek-r1:8b", "label": "8B", "paramsB": 8.0, "sizeGB": 4.9, "isDefault": false },
+        { "tag": "deepseek-r1:14b", "label": "14B", "paramsB": 14.8, "sizeGB": 9.0, "isDefault": false },
+        { "tag": "deepseek-r1:32b", "label": "32B", "paramsB": 32.8, "sizeGB": 20.0, "isDefault": false },
+        { "tag": "deepseek-r1:70b", "label": "70B", "paramsB": 70.6, "sizeGB": 42.5, "isDefault": false }
+      ]
+    },
+    {
+      "id": "gpt-oss",
+      "name": "GPT-OSS",
+      "publisher": "OpenAI",
+      "category": "Reasoning",
+      "description": "OpenAI's open-weight mixture-of-experts models. Only a fraction of parameters activates per token, so they feel far faster than their raw size suggests.",
+      "license": "Apache 2.0",
+      "context": "128k context",
+      "capabilities": ["reasoning", "tools"],
+      "variants": [
+        { "tag": "gpt-oss:20b", "label": "20B", "paramsB": 21.0, "sizeGB": 13.0, "activeB": 3.6, "isDefault": true },
+        { "tag": "gpt-oss:120b", "label": "120B", "paramsB": 117.0, "sizeGB": 65.0, "activeB": 5.1, "isDefault": false }
+      ]
+    },
+    {
+      "id": "gemma3",
+      "name": "Gemma 3",
+      "publisher": "Google",
+      "category": "General",
+      "description": "Google's open model family with multimodal vision on every size from 4B up, 128k context and a very agreeable writing style.",
+      "license": "Gemma Terms of Use",
+      "context": "128k context",
+      "capabilities": ["tools", "vision"],
+      "variants": [
+        { "tag": "gemma3:1b", "label": "1B", "paramsB": 1.0, "sizeGB": 0.8, "isDefault": false },
+        { "tag": "gemma3:4b", "label": "4B", "paramsB": 4.3, "sizeGB": 3.3, "isDefault": true },
+        { "tag": "gemma3:12b", "label": "12B", "paramsB": 12.2, "sizeGB": 8.1, "isDefault": false },
+        { "tag": "gemma3:27b", "label": "27B", "paramsB": 27.9, "sizeGB": 17.0, "isDefault": false }
+      ]
+    },
+    {
+      "id": "gemma2",
+      "name": "Gemma 2",
+      "publisher": "Google",
+      "category": "General",
+      "description": "Google's previous-generation open models — efficient, well-tuned and famously pleasant to read.",
+      "license": "Gemma Terms of Use",
+      "context": "8k context",
+      "capabilities": [],
+      "variants": [
+        { "tag": "gemma2:2b", "label": "2B", "paramsB": 2.6, "sizeGB": 1.6, "isDefault": true },
+        { "tag": "gemma2:9b", "label": "9B", "paramsB": 9.2, "sizeGB": 5.4, "isDefault": false },
+        { "tag": "gemma2:27b", "label": "27B", "paramsB": 27.2, "sizeGB": 16.0, "isDefault": false }
+      ]
+    },
+    {
+      "id": "phi4",
+      "name": "Phi-4",
+      "publisher": "Microsoft",
+      "category": "Reasoning",
+      "description": "Microsoft's 14B model that punches above its weight in reasoning, math and structured tasks thanks to synthetic-data training.",
+      "license": "MIT",
+      "context": "16k context",
+      "capabilities": [],
+      "variants": [
+        { "tag": "phi4", "label": "14B", "paramsB": 14.7, "sizeGB": 9.1, "isDefault": true },
+        { "tag": "phi4-mini", "label": "3.8B", "paramsB": 3.8, "sizeGB": 2.5, "isDefault": false }
+      ]
+    },
+    {
+      "id": "mistral",
+      "name": "Mistral",
+      "publisher": "Mistral AI",
+      "category": "General",
+      "description": "Mistral's original 7B — small, fast and still one of the best-behaved models for simple tasks and weak hardware.",
+      "license": "Apache 2.0",
+      "context": "32k context",
+      "capabilities": [],
+      "variants": [
+        { "tag": "mistral", "label": "7B", "paramsB": 7.2, "sizeGB": 4.1, "isDefault": true }
+      ]
+    },
+    {
+      "id": "mistral-nemo",
+      "name": "Mistral Nemo",
+      "publisher": "Mistral AI · NVIDIA",
+      "category": "General",
+      "description": "12B model with a huge 128k context and native tool calling, co-developed with NVIDIA. A great middle ground between 7B and 14B.",
+      "license": "Apache 2.0",
+      "context": "128k context",
+      "capabilities": ["tools"],
+      "variants": [
+        { "tag": "mistral-nemo", "label": "12B", "paramsB": 12.2, "sizeGB": 7.1, "isDefault": true }
+      ]
+    },
+    {
+      "id": "mistral-small3.1",
+      "name": "Mistral Small 3.1",
+      "publisher": "Mistral AI",
+      "category": "General",
+      "description": "24B model released as a strong local alternative to closed models: fast, tool-calling and vision-capable, tuned for low latency.",
+      "license": "Apache 2.0",
+      "context": "128k context",
+      "capabilities": ["tools", "vision"],
+      "variants": [
+        { "tag": "mistral-small3.1", "label": "24B", "paramsB": 24.0, "sizeGB": 15.0, "isDefault": true }
+      ]
+    },
+    {
+      "id": "codestral",
+      "name": "Codestral",
+      "publisher": "Mistral AI",
+      "category": "Coding",
+      "description": "Mistral's dedicated code model covering 80+ languages with fast completion and fill-in-the-middle.",
+      "license": "Mistral Non-Production License",
+      "context": "32k context",
+      "capabilities": ["coding", "tools"],
+      "variants": [
+        { "tag": "codestral", "label": "22B", "paramsB": 22.2, "sizeGB": 13.0, "isDefault": true }
+      ]
+    },
+    {
+      "id": "mixtral",
+      "name": "Mixtral 8x7B",
+      "publisher": "Mistral AI",
+      "category": "General",
+      "description": "The classic sparse mixture-of-experts: 47B total parameters but only ~13B active per token. Needs the memory of a big model with the speed of a small one.",
+      "license": "Apache 2.0",
+      "context": "32k context",
+      "capabilities": ["tools"],
+      "variants": [
+        { "tag": "mixtral", "label": "8x7B", "paramsB": 46.7, "sizeGB": 26.0, "activeB": 12.9, "isDefault": true }
+      ]
+    },
+    {
+      "id": "llama3.2-vision",
+      "name": "Llama 3.2 Vision",
+      "publisher": "Meta",
+      "category": "Vision",
+      "description": "Llama with eyes: understands screenshots, diagrams, charts and photos. Useful for UI reviews of your apps.",
+      "license": "Llama 3.2 Community",
+      "context": "128k context",
+      "capabilities": ["vision"],
+      "variants": [
+        { "tag": "llama3.2-vision", "label": "11B", "paramsB": 11.9, "sizeGB": 7.9, "isDefault": true },
+        { "tag": "llama3.2-vision:90b", "label": "90B", "paramsB": 91.6, "sizeGB": 55.0, "isDefault": false }
+      ]
+    },
+    {
+      "id": "llava",
+      "name": "LLaVA",
+      "publisher": "LLaVA project",
+      "category": "Vision",
+      "description": "The open-source multimodal classic — describe images, read text in pictures, reason about visual content.",
+      "license": "LLaMA 2 / OpenAI",
+      "context": "8k context",
+      "capabilities": ["vision"],
+      "variants": [
+        { "tag": "llava", "label": "7B", "paramsB": 7.3, "sizeGB": 4.7, "isDefault": true },
+        { "tag": "llava:13b", "label": "13B", "paramsB": 13.3, "sizeGB": 8.0, "isDefault": false },
+        { "tag": "llava:34b", "label": "34B", "paramsB": 34.0, "sizeGB": 20.0, "isDefault": false }
+      ]
+    },
+    {
+      "id": "codellama",
+      "name": "Code Llama",
+      "publisher": "Meta",
+      "category": "Coding",
+      "description": "Meta's code-specialized Llama family, fine-tuned on code completion and infilling across popular languages.",
+      "license": "Llama 2 Community",
+      "context": "16k–100k context",
+      "capabilities": ["coding"],
+      "variants": [
+        { "tag": "codellama:7b", "label": "7B", "paramsB": 7.0, "sizeGB": 3.8, "isDefault": true },
+        { "tag": "codellama:13b", "label": "13B", "paramsB": 13.0, "sizeGB": 7.4, "isDefault": false },
+        { "tag": "codellama:34b", "label": "34B", "paramsB": 34.0, "sizeGB": 19.0, "isDefault": false },
+        { "tag": "codellama:70b", "label": "70B", "paramsB": 70.0, "sizeGB": 38.0, "isDefault": false }
+      ]
+    },
+    {
+      "id": "tinyllama",
+      "name": "TinyLlama",
+      "publisher": "TinyLlama project",
+      "category": "General",
+      "description": "1.1B model trained on 3 trillion tokens. Absurdly fast on anything — including that old laptop.",
+      "license": "Apache 2.0",
+      "context": "2k context",
+      "capabilities": [],
+      "variants": [
+        { "tag": "tinyllama", "label": "1.1B", "paramsB": 1.1, "sizeGB": 0.6, "isDefault": true }
+      ]
+    },
+    {
+      "id": "smollm2",
+      "name": "SmolLM2",
+      "publisher": "Hugging Face",
+      "category": "General",
+      "description": "Hugging Face's tiny-but-capable family, great for autocomplete-style helpers and edge hardware.",
+      "license": "Apache 2.0",
+      "context": "8k–16k context",
+      "capabilities": [],
+      "variants": [
+        { "tag": "smollm2:1.7b", "label": "1.7B", "paramsB": 1.7, "sizeGB": 1.8, "isDefault": true }
+      ]
+    },
+    {
+      "id": "granite3.1-dense",
+      "name": "Granite 3.1 Dense",
+      "publisher": "IBM",
+      "category": "General",
+      "description": "IBM's enterprise-grade models: careful instruction following, tool calling and 128k context, licensed for commercial use.",
+      "license": "Apache 2.0",
+      "context": "128k context",
+      "capabilities": ["tools"],
+      "variants": [
+        { "tag": "granite3.1-dense:2b", "label": "2B", "paramsB": 2.5, "sizeGB": 1.6, "isDefault": true },
+        { "tag": "granite3.1-dense:8b", "label": "8B", "paramsB": 8.1, "sizeGB": 4.9, "isDefault": false }
+      ]
+    }
+  ]
+}

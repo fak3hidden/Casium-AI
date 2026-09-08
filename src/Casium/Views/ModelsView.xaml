@@ -1,0 +1,198 @@
+<UserControl x:Class="Casium.Views.ModelsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:Casium.Controls"
+             xmlns:core="clr-namespace:Casium.Core;assembly=Casium.Core">
+
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type core:OllamaModel}">
+            <Border Style="{StaticResource Card}" Margin="0,0,0,10" Padding="16,14">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}"
+                                       FontFamily="{StaticResource Font.Mono}"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource Brush.Text.Primary}"
+                                       VerticalAlignment="Center"/>
+                            <controls:Pill Text="{Binding ParameterSize}" Kind="Accent"
+                                           Margin="12,0,0,0" VerticalAlignment="Center"/>
+                            <controls:Pill Text="{Binding Quantization}" Kind="Neutral"
+                                           Margin="8,0,0,0" VerticalAlignment="Center"/>
+                            <controls:Pill Text="{Binding Family}" Kind="Neutral"
+                                           Margin="8,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                            <TextBlock Text="&#xE823;"
+                                       FontFamily="{StaticResource Font.Icons}"
+                                       FontSize="11.5"
+                                       Foreground="{DynamicResource Brush.Text.Muted}"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding Modified, StringFormat='{}{0:MMM d, yyyy}}'"
+                                       Style="{StaticResource Txt.Muted}"
+                                       VerticalAlignment="Center"
+                                       Margin="7,0,0,0"/>
+                            <TextBlock Text="·" Style="{StaticResource Txt.Muted}"
+                                       VerticalAlignment="Center" Margin="10,0,10,0"/>
+                            <TextBlock Text="{Binding SizeBytes, StringFormat='{}{0:N0} bytes on disk'}"
+                                       Style="{StaticResource Txt.Muted}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center"
+                                Margin="18,0,0,0" MinWidth="120">
+                        <Button Style="{StaticResource Btn.Secondary}" Click="ChatWithModel_Click"
+                                ToolTip="Start a chat with this model">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE8BD;"
+                                           FontFamily="{StaticResource Font.Icons}"
+                                           FontSize="13" VerticalAlignment="Center"/>
+                                <TextBlock Text="Chat" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource Btn.Danger}" Margin="0,8,0,0"
+                                Click="DeleteModel_Click" ToolTip="Delete this model from disk">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE74D;"
+                                           FontFamily="{StaticResource Font.Icons}"
+                                           FontSize="13" VerticalAlignment="Center"/>
+                                <TextBlock Text="Delete" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid Margin="24,18,24,18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- header -->
+        <Grid Grid.Row="0" Margin="0,0,0,18">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="Local models" Style="{StaticResource Txt.H1}"/>
+                <TextBlock x:Name="Subtitle" Text="Models downloaded to this machine"
+                           Style="{StaticResource Txt.BodySecondary}" Margin="0,5,0,0"/>
+            </StackPanel>
+            <Button Grid.Column="1" Style="{StaticResource Btn.Secondary}" Click="GoBrowse_Click"
+                    VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE719;"
+                               FontFamily="{StaticResource Font.Icons}"
+                               FontSize="13" VerticalAlignment="Center"/>
+                    <TextBlock Text="Browse models" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <!-- list -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="0,0,10,0">
+
+                <!-- pull by tag -->
+                <Border Style="{StaticResource Card.Sunken}" Margin="0,0,0,14" Padding="14">
+                    <StackPanel>
+                        <TextBlock Text="Pull by tag" Style="{StaticResource Txt.H3}"/>
+                        <Grid Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="PullInput"
+                                     Tag="Any Ollama tag — e.g. llama3.2:3b, qwen2.5-coder:14b"
+                                     KeyDown="PullInput_KeyDown"/>
+                            <Button Grid.Column="1" Style="{StaticResource Btn.Primary}"
+                                    Margin="10,0,0,0" Click="Pull_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE896;"
+                                               FontFamily="{StaticResource Font.Icons}"
+                                               FontSize="13" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Pull" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                        <TextBlock Text="Anything from ollama.com/library works."
+                                   Style="{StaticResource Txt.Muted}" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- active pulls -->
+                <ItemsControl x:Name="PullList" Margin="0,0,0,6">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource Card}" Margin="0,0,0,10" Padding="16,13">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel>
+                                        <Grid>
+                                            <TextBlock Text="{Binding Tag}"
+                                                       FontFamily="{StaticResource Font.Mono}"
+                                                       FontSize="13.5" FontWeight="SemiBold"
+                                                       Foreground="{DynamicResource Brush.Text.Primary}"/>
+                                            <TextBlock Text="{Binding Status}"
+                                                       Style="{StaticResource Txt.Caption}"
+                                                       HorizontalAlignment="Right"/>
+                                        </Grid>
+                                        <ProgressBar Margin="0,10,0,0"
+                                                     Minimum="0" Maximum="1"
+                                                     Value="{Binding ProgressFraction}"
+                                                     IsIndeterminate="{Binding IsIndeterminate}"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1"
+                                            Style="{StaticResource Btn.Danger}"
+                                            Margin="16,0,0,0" VerticalAlignment="Center"
+                                            Click="CancelPull_Click"
+                                            Visibility="{Binding Running, Converter={StaticResource Conv.Bool}}">
+                                        <TextBlock Text="Cancel" VerticalAlignment="Center"/>
+                                    </Button>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- models -->
+                <ItemsControl x:Name="ModelList"/>
+
+                <!-- empty state -->
+                <StackPanel x:Name="EmptyState" Visibility="Collapsed" Margin="0,30,0,30">
+                    <TextBlock Text="&#xE8F1;"
+                               FontFamily="{StaticResource Font.Icons}"
+                               FontSize="34"
+                               Foreground="{DynamicResource Brush.Text.Muted}"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="No local models yet"
+                               Style="{StaticResource Txt.H2}"
+                               HorizontalAlignment="Center"
+                               Margin="0,14,0,0"/>
+                    <TextBlock Text="Download one from the Browse page — Casium will tell you which sizes fit your hardware."
+                               Style="{StaticResource Txt.BodySecondary}"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"
+                               Margin="0,8,0,0"/>
+                    <Button Style="{StaticResource Btn.Primary}"
+                            HorizontalAlignment="Center"
+                            Margin="0,18,0,0"
+                            Click="GoBrowse_Click">
+                        <TextBlock Text="Browse models" VerticalAlignment="Center"/>
+                    </Button>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

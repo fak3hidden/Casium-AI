@@ -1,0 +1,40 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Casium "Midnight" — deep charcoal with cool blue-gray surfaces. -->
+
+    <SolidColorBrush x:Key="Brush.Bg.Base" Color="#101318"/>
+    <SolidColorBrush x:Key="Brush.Bg.Sidebar" Color="#14181F"/>
+    <SolidColorBrush x:Key="Brush.Bg.Surface" Color="#1A1F28"/>
+    <SolidColorBrush x:Key="Brush.Bg.SurfaceAlt" Color="#222936"/>
+    <SolidColorBrush x:Key="Brush.Bg.Sunken" Color="#0C0E13"/>
+    <SolidColorBrush x:Key="Brush.Bg.Overlay" Color="#1C212C"/>
+    <SolidColorBrush x:Key="Brush.Bg.Hover" Color="#222936"/>
+
+    <SolidColorBrush x:Key="Brush.Border.Subtle" Color="#272E3B"/>
+    <SolidColorBrush x:Key="Brush.Border.Medium" Color="#364053"/>
+    <SolidColorBrush x:Key="Brush.Border.Strong" Color="#4A566E"/>
+
+    <SolidColorBrush x:Key="Brush.Text.Primary" Color="#E9EDF4"/>
+    <SolidColorBrush x:Key="Brush.Text.Secondary" Color="#A9B4C6"/>
+    <SolidColorBrush x:Key="Brush.Text.Muted" Color="#6F7B90"/>
+
+    <SolidColorBrush x:Key="Brush.Success" Color="#4ADE80"/>
+    <SolidColorBrush x:Key="Brush.Success.Soft" Color="#16291E"/>
+    <SolidColorBrush x:Key="Brush.Warning" Color="#FBBF24"/>
+    <SolidColorBrush x:Key="Brush.Warning.Soft" Color="#33270D"/>
+    <SolidColorBrush x:Key="Brush.Danger" Color="#F87171"/>
+    <SolidColorBrush x:Key="Brush.Danger.Soft" Color="#361D20"/>
+    <SolidColorBrush x:Key="Brush.Info" Color="#7DD3FC"/>
+    <SolidColorBrush x:Key="Brush.Info.Soft" Color="#14202B"/>
+
+    <SolidColorBrush x:Key="Brush.ScrollBar.Thumb" Color="#2C3444"/>
+    <SolidColorBrush x:Key="Brush.ScrollBar.ThumbHover" Color="#3B465C"/>
+
+    <SolidColorBrush x:Key="Brush.Code.Bg" Color="#0B0D12"/>
+    <SolidColorBrush x:Key="Brush.Code.Border" Color="#232B3A"/>
+
+    <SolidColorBrush x:Key="Brush.Window.Border" Color="#05070A"/>
+    <SolidColorBrush x:Key="Brush.ToolUse.Bg" Color="#141922"/>
+
+</ResourceDictionary>

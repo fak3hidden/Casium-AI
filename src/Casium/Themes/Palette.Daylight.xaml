@@ -1,0 +1,40 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Casium "Daylight" — clean light surfaces with soft blue-gray borders. -->
+
+    <SolidColorBrush x:Key="Brush.Bg.Base" Color="#F2F4F8"/>
+    <SolidColorBrush x:Key="Brush.Bg.Sidebar" Color="#E9EDF3"/>
+    <SolidColorBrush x:Key="Brush.Bg.Surface" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Brush.Bg.SurfaceAlt" Color="#EDF0F6"/>
+    <SolidColorBrush x:Key="Brush.Bg.Sunken" Color="#E6EAF1"/>
+    <SolidColorBrush x:Key="Brush.Bg.Overlay" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Brush.Bg.Hover" Color="#E8ECF4"/>
+
+    <SolidColorBrush x:Key="Brush.Border.Subtle" Color="#E2E7F0"/>
+    <SolidColorBrush x:Key="Brush.Border.Medium" Color="#CBD3E1"/>
+    <SolidColorBrush x:Key="Brush.Border.Strong" Color="#AEB9CC"/>
+
+    <SolidColorBrush x:Key="Brush.Text.Primary" Color="#1B2130"/>
+    <SolidColorBrush x:Key="Brush.Text.Secondary" Color="#55617A"/>
+    <SolidColorBrush x:Key="Brush.Text.Muted" Color="#8B94A9"/>
+
+    <SolidColorBrush x:Key="Brush.Success" Color="#15803D"/>
+    <SolidColorBrush x:Key="Brush.Success.Soft" Color="#DCFCE7"/>
+    <SolidColorBrush x:Key="Brush.Warning" Color="#B45309"/>
+    <SolidColorBrush x:Key="Brush.Warning.Soft" Color="#FEF3C7"/>
+    <SolidColorBrush x:Key="Brush.Danger" Color="#DC2626"/>
+    <SolidColorBrush x:Key="Brush.Danger.Soft" Color="#FDE2E2"/>
+    <SolidColorBrush x:Key="Brush.Info" Color="#0369A1"/>
+    <SolidColorBrush x:Key="Brush.Info.Soft" Color="#E0F2FE"/>
+
+    <SolidColorBrush x:Key="Brush.ScrollBar.Thumb" Color="#C6CEDC"/>
+    <SolidColorBrush x:Key="Brush.ScrollBar.ThumbHover" Color="#AEB9CB"/>
+
+    <SolidColorBrush x:Key="Brush.Code.Bg" Color="#F5F7FB"/>
+    <SolidColorBrush x:Key="Brush.Code.Border" Color="#E2E7F0"/>
+
+    <SolidColorBrush x:Key="Brush.Window.Border" Color="#C9D1DF"/>
+    <SolidColorBrush x:Key="Brush.ToolUse.Bg" Color="#EDF0F6"/>
+
+</ResourceDictionary>

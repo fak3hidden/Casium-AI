@@ -1,0 +1,17 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Accent "Rose". -->
+
+    <SolidColorBrush x:Key="Brush.Accent" Color="#E85C8A"/>
+    <SolidColorBrush x:Key="Brush.Accent.Hover" Color="#F06F9C"/>
+    <SolidColorBrush x:Key="Brush.Accent.Press" Color="#D6497A"/>
+    <SolidColorBrush x:Key="Brush.Accent.Soft" Color="#2EE85C8A"/>
+    <SolidColorBrush x:Key="Brush.Accent.Softer" Color="#1AE85C8A"/>
+    <SolidColorBrush x:Key="Brush.Accent.Border" Color="#52E85C8A"/>
+    <SolidColorBrush x:Key="Brush.Text.OnAccent" Color="#FFFFFF"/>
+
+    <SolidColorBrush x:Key="Brush.UserBubble.Bg" Color="#21E85C8A"/>
+    <SolidColorBrush x:Key="Brush.UserBubble.Border" Color="#40E85C8A"/>
+
+</ResourceDictionary>
