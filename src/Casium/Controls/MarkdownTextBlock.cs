@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Navigation;
 using Casium.Core;
 
 namespace Casium.Controls;
@@ -12,7 +13,7 @@ namespace Casium.Controls;
 /// Renders a chunk of markdown-ish text (headings, lists, quotes, bold/italic/inline code,
 /// links) into a TextBlock. Used for assistant chat messages.
 /// </summary>
-public class MarkdownTextBlock : Control
+public partial class MarkdownTextBlock : Control
 {
     private TextBlock? _text;
 
