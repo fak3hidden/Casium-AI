@@ -2,9 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Casium.Core", "src\Casium.Core\Casium.Core.csproj", "{6F1B4D52-9C3A-4B7E-8A21-5D0E7F2C1101}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Casium", "src\Casium\Casium.csproj", "{C42A8E17-5B64-4F3D-9E76-2A8B93D4F7A2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Casium.Core", "src\Casium.Core\Casium.Core.csproj", "{6F1B4D52-9C3A-4B7E-8A21-5D0E7F2C1101}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
