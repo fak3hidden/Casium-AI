@@ -1,0 +1,118 @@
+<Window x:Class="Casium.Dialogs.GitHubConnectDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="Connect GitHub"
+        Width="520" SizeToContent="Height" MaxWidth="560"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        Background="{DynamicResource Brush.Bg.Base}"
+        Foreground="{DynamicResource Brush.Text.Primary}"
+        FontFamily="{StaticResource Font.Primary}"
+        UseLayoutRounding="True"
+        WindowStyle="None">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="48"
+                            ResizeBorderThickness="0"
+                            UseAeroCaptionButtons="False"/>
+    </shell:WindowChrome.WindowChrome>
+
+    <Border BorderBrush="{DynamicResource Brush.Window.Border}" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="48"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0"
+                    BorderBrush="{DynamicResource Brush.Border.Subtle}"
+                    BorderThickness="0,0,0,1">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" Margin="20,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="&#xE943;"
+                                   FontFamily="{StaticResource Font.Icons}"
+                                   FontSize="14"
+                                   Foreground="{DynamicResource Brush.Accent}"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,10,0"/>
+                        <TextBlock Text="Connect GitHub"
+                                   Style="{StaticResource Txt.H2}"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <Button Content="&#xE8BB;"
+                            Style="{StaticResource Btn.WindowClose}"
+                            shell:WindowChrome.IsHitTestVisibleInChrome="True"
+                            HorizontalAlignment="Right"
+                            Click="Close_Click"/>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="1" Margin="24,18,24,22">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Text="Give your AI access to GitHub — repos, issues and pull requests. Create a token on GitHub (one click, scopes pre-selected), paste it below, and Casium verifies it instantly."
+                           Style="{StaticResource Txt.BodySecondary}"
+                           TextWrapping="Wrap"/>
+
+                <Button Grid.Row="1"
+                        Style="{StaticResource Btn.Primary}"
+                        HorizontalAlignment="Left"
+                        Margin="0,14,0,0"
+                        Click="OpenTokenPage_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE8A7;"
+                                   FontFamily="{StaticResource Font.Icons}"
+                                   FontSize="13" VerticalAlignment="Center"/>
+                        <TextBlock Text="Open GitHub — Create token"
+                                   VerticalAlignment="Center" Margin="8,0,0,0"/>
+                    </StackPanel>
+                </Button>
+
+                <TextBlock Grid.Row="2" Text="Paste your token"
+                           Style="{StaticResource Txt.Caption}" Margin="0,16,0,6"/>
+                <TextBox Grid.Row="3"
+                         x:Name="TokenBox"
+                         FontFamily="{StaticResource Font.Mono}"
+                         Tag="ghp_… or github_pat_…"
+                         TextChanged="TokenBox_TextChanged"/>
+
+                <TextBlock Grid.Row="4"
+                           x:Name="StatusText"
+                           Margin="0,10,0,0"
+                           FontSize="12"
+                           TextWrapping="Wrap"/>
+
+                <Grid Grid.Row="5" Margin="0,16,0,0">
+                    <Button Style="{StaticResource Btn.Ghost}" HorizontalAlignment="Left"
+                            Click="Cancel_Click">
+                        <TextBlock Text="Cancel" VerticalAlignment="Center"/>
+                    </Button>
+                    <Button x:Name="ConnectButton"
+                            Style="{StaticResource Btn.Primary}"
+                            HorizontalAlignment="Right" MinWidth="150"
+                            Click="Connect_Click">
+                        <TextBlock Text="Verify &amp; connect" VerticalAlignment="Center"/>
+                    </Button>
+                </Grid>
+
+                <TextBlock Grid.Row="6"
+                           Text="The token is stored only in this app's mcp.json on your machine and sent to no one but GitHub."
+                           Style="{StaticResource Txt.Muted}"
+                           FontSize="10.5"
+                           TextWrapping="Wrap"
+                           Margin="0,12,0,0"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

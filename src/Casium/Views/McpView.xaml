@@ -29,7 +29,16 @@
                         <TextBlock Text="Export" VerticalAlignment="Center" Margin="7,0,0,0"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{StaticResource Btn.Primary}" Margin="10,0,0,0" Click="AddServer_Click">
+                <Button Style="{StaticResource Btn.Primary}" Margin="10,0,0,0" Click="ConnectGitHub_Click"
+                        ToolTip="Give your AI access to your GitHub — repos, issues, pull requests">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE943;"
+                                   FontFamily="{StaticResource Font.Icons}"
+                                   FontSize="13" VerticalAlignment="Center"/>
+                        <TextBlock Text="Connect GitHub" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource Btn.Secondary}" Margin="10,0,0,0" Click="AddServer_Click">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="&#xE710;"
                                    FontFamily="{StaticResource Font.Icons}"

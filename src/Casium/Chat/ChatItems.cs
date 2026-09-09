@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Windows.Threading;
 using Casium.Controls;
 using Casium.Core;
 
@@ -10,11 +11,17 @@ public sealed class UserChatItem
     public DateTime Time { get; } = DateTime.Now;
 }
 
+/// <summary>
+/// One assistant message. During streaming, tokens append to <see cref="Text"/> and the
+/// markdown blocks are re-rendered at most every ~120 ms (not per token — that storms the
+/// layout pipeline), then once more, authoritatively, when <see cref="Finish"/> is called.
+/// </summary>
 public sealed class AssistantChatItem : ObservableObject
 {
     private string _text = "";
     private string _stats = "";
     private bool _streaming = true;
+    private DispatcherTimer? _rebuildTimer;
 
     public string Model { get; set; } = "";
     public DateTime Time { get; } = DateTime.Now;
@@ -26,6 +33,7 @@ public sealed class AssistantChatItem : ObservableObject
         set
         {
             _text = value;
+            OnPropertyChanged(nameof(Text));
             Rebuild();
         }
     }
@@ -45,7 +53,33 @@ public sealed class AssistantChatItem : ObservableObject
     public void Append(string delta)
     {
         _text += delta;
+        OnPropertyChanged(nameof(Text));
+        ScheduleRebuild();
+    }
+
+    /// <summary>Call once the stream is over: final render of the full markdown.</summary>
+    public void Finish()
+    {
+        _rebuildTimer?.Stop();
+        _rebuildTimer = null;
         Rebuild();
+    }
+
+    private void ScheduleRebuild()
+    {
+        if (_rebuildTimer != null) return;
+        var timer = new DispatcherTimer(DispatcherPriority.Background)
+        {
+            Interval = TimeSpan.FromMilliseconds(120)
+        };
+        timer.Tick += (_, _) =>
+        {
+            timer.Stop();
+            if (ReferenceEquals(_rebuildTimer, timer)) _rebuildTimer = null;
+            Rebuild();
+        };
+        _rebuildTimer = timer;
+        timer.Start();
     }
 
     public void Rebuild()
@@ -53,7 +87,6 @@ public sealed class AssistantChatItem : ObservableObject
         Blocks.Clear();
         foreach (var block in Markdown.ParseBlocks(_text))
             Blocks.Add(block);
-        OnPropertyChanged(nameof(Text));
     }
 }
 

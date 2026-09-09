@@ -63,6 +63,17 @@ public sealed class HardwareInfo
         }
         catch { }
 
+        // Fallbacks so compatibility math never sees zero/NaN.
+        if (hw.TotalRamGB <= 0)
+        {
+            try
+            {
+                hw.TotalRamGB = GC.GetGCMemoryInfo().TotalAvailableMemoryBytes / 1024.0 / 1024 / 1024;
+            }
+            catch { }
+        }
+        if (hw.TotalRamGB < 1) hw.TotalRamGB = 16; // last resort: assume a typical machine
+
         foreach (var (name, vramMB, source) in DetectGpus())
         {
             hw.Gpus.Add(new GpuInfo

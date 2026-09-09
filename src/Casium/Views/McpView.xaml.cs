@@ -205,9 +205,70 @@ public partial class McpView : UserControl
             ToastService.Show($"Saved server “{result.Name}”");
     }
 
+    // ================================================================ GitHub one-click connect
+
+    private async void ConnectGitHub_Click(object sender, RoutedEventArgs e) => await RunGitHubFlowAsync("GitHub");
+
+    /// <summary>
+    /// Arena-style GitHub connect: open the token page (scopes pre-filled), verify the
+    /// pasted token against the GitHub API, then create/update the GitHub MCP server with
+    /// it — the user never touches command lines or environment variables.
+    /// </summary>
+    private async Task RunGitHubFlowAsync(string serverName)
+    {
+        var preset = McpPresets.All.FirstOrDefault(p => p.Name == serverName) ?? new McpPreset
+        {
+            Name = serverName,
+            Command = "npx",
+            Args = new List<string> { "-y", "@modelcontextprotocol/server-github" }
+        };
+
+        if (!GitHubConnectDialog.Show(Ui.OwnerWindow(this), out var user, out var token))
+            return;
+
+        var config = AppServices.Mcp.Find(serverName);
+        if (config == null)
+        {
+            config = new McpServerConfig
+            {
+                Name = serverName,
+                Command = preset.Command,
+                Args = new List<string>(preset.Args),
+                Enabled = true
+            };
+        }
+        config.Env["GITHUB_PERSONAL_ACCESS_TOKEN"] = token;
+        config.Enabled = true;
+        AppServices.Mcp.Upsert(config);
+        RebuildRows();
+
+        var row = _rows.FirstOrDefault(r => string.Equals(r.Config.Name, serverName, StringComparison.OrdinalIgnoreCase));
+        if (row == null) return;
+
+        await ConnectRowAsync(row, silent: true);
+        if (AppServices.Mcp.IsConnected(serverName))
+        {
+            var count = AppServices.Mcp.GetClient(serverName)?.Tools.Count ?? 0;
+            ToastService.Show($"GitHub connected as @{user!.Login} — {count} tools ready", ToastKind.Success);
+        }
+        else
+        {
+            // Server saved but couldn't launch (e.g. Node.js missing) — the row shows why.
+            ToastService.Show($"GitHub token saved as @{user!.Login}, but the server didn't start — see its card for the reason.",
+                ToastKind.Warning);
+        }
+    }
+
     private async void Preset_Click(object sender, RoutedEventArgs e)
     {
         if ((sender as FrameworkElement)?.DataContext is not McpPreset preset) return;
+
+        // GitHub presets go through the guided connect flow instead of the raw editor.
+        if (preset.Name == "GitHub" || preset.Name == "GitHub (official)")
+        {
+            await RunGitHubFlowAsync(preset.Name);
+            return;
+        }
 
         var config = new McpServerConfig
         {

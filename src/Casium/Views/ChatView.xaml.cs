@@ -38,6 +38,10 @@ public partial class ChatView : UserControl
         Messages.ItemsSource = _items;
         _items.CollectionChanged += (_, _) => AutoScroll();
 
+        // Send button lights up only when there's something to send.
+        SendButton.IsEnabled = false;
+        Input.TextChanged += (_, _) => SendButton.IsEnabled = Input.Text.Trim().Length > 0;
+
         Bus.EngineChanged += RefreshEngineState;
         Bus.ModelsChanged += RefreshModels;
         Bus.PromptsChanged += RefreshPrompts;
@@ -197,8 +201,21 @@ public partial class ChatView : UserControl
 
     private async void Send_Click(object sender, RoutedEventArgs e) => await SendFromInputAsync();
 
+    /// <summary>
+    /// Enter sends, Shift+Enter inserts a newline. Handled in the preview (tunneling) phase
+    /// so the TextBox's own key handling can never eat the Enter key first.
+    /// </summary>
+    private async void Input_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.Enter) return;
+        if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift)) return; // let it make a newline
+        e.Handled = true;
+        await SendFromInputAsync();
+    }
+
     private async void Input_KeyDown(object sender, KeyEventArgs e)
     {
+        // Fallback path (kept for safety): send on Enter if the preview pass somehow didn't.
         if (e.Key == Key.Enter && Keyboard.Modifiers != ModifierKeys.Shift)
         {
             e.Handled = true;
@@ -269,6 +286,8 @@ public partial class ChatView : UserControl
 
         var retriedWithoutTools = false;
         var maxIterations = Math.Max(1, settings.ToolLoopMax);
+        var receivedChars = 0L;
+        var chunkCount = 0;
 
         for (var iteration = 0; iteration < maxIterations; iteration++)
         {
@@ -277,6 +296,8 @@ public partial class ChatView : UserControl
             AutoScroll();
 
             var final = new ChatChunk();
+            receivedChars = 0;
+            chunkCount = 0;
             try
             {
                 await AppServices.Ollama.ChatStreamAsync(_model, _convo, tools, options, chunk =>
@@ -286,8 +307,15 @@ public partial class ChatView : UserControl
                     {
                         Dispatcher.Invoke(() =>
                         {
+                            chunkCount++;
+                            if (chunkCount == 1)
+                                Core.Log.Info($"[chat] first chunk from {_model}: " +
+                                              $"content={(chunk.Content?.Length ?? 0)} chars, done={chunk.Done}");
                             if (chunk.Content is { Length: > 0 })
+                            {
+                                receivedChars += chunk.Content.Length;
                                 bubble.Append(chunk.Content);
+                            }
                             if (chunk.Done)
                                 final = chunk;
                         });
@@ -300,6 +328,7 @@ public partial class ChatView : UserControl
             }
             catch (OperationCanceledException)
             {
+                bubble.Finish();
                 bubble.Streaming = false;
                 bubble.Stats = "Stopped";
                 SetBusy(false);
@@ -322,11 +351,16 @@ public partial class ChatView : UserControl
                     iteration--;
                     continue;
                 }
+                Core.Log.Warn($"[chat] Ollama error: {ex.Message}");
                 _items.Add(new NoticeChatItem { Text = ex.Message, Kind = NoticeKind.Error });
                 SetBusy(false);
                 return;
             }
 
+            Core.Log.Info($"[chat] stream complete: {chunkCount} chunks, {receivedChars} chars, " +
+                          $"eval={final.EvalCount}, doneReason={final.DoneReason ?? "?"}");
+
+            bubble.Finish();
             bubble.Streaming = false;
             bubble.Stats = FormatStats(final);
 

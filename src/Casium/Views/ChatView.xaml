@@ -491,7 +491,8 @@
                              VerticalScrollBarVisibility="Auto"
                              MaxHeight="180"
                              Tag="Message Casium — Enter to send, Shift+Enter for a new line"
-                             KeyDown="Input_KeyDown"/>
+                             KeyDown="Input_KeyDown"
+                             PreviewKeyDown="Input_PreviewKeyDown"/>
                     <StackPanel Grid.Column="1"
                                 Orientation="Vertical"
                                 VerticalAlignment="Bottom"

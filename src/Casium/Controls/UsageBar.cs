@@ -60,7 +60,9 @@ public class UsageBar : Control
     private void UpdateColumns()
     {
         if (_fill == null || _rest == null) return;
-        var ratio = Math.Clamp(Ratio, 0.0, 1.0);
+        var ratio = Ratio;
+        if (double.IsNaN(ratio) || double.IsInfinity(ratio)) ratio = 1.0;
+        ratio = Math.Clamp(ratio, 0.0, 1.0);
         _fill.Width = new GridLength(Math.Max(ratio, 0.02), GridUnitType.Star);
         _rest.Width = new GridLength(Math.Max(1.0 - ratio, 0.0), GridUnitType.Star);
     }
