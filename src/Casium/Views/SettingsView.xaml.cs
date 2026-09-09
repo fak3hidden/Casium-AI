@@ -291,11 +291,16 @@ public partial class SettingsView : UserControl
     private void OllamaLib_Click(object sender, RoutedEventArgs e)
         => Ui.OpenUrl("https://ollama.com/library");
 
-    private void OpenDataFolder_Click(object sender, RoutedEventArgs e)
+    private void OpenDataFolder_Click(object sender, RoutedEventArgs e) => OpenFolder(AppData.Root);
+
+    private void OpenLogsFolder_Click(object sender, RoutedEventArgs e)
+        => OpenFolder(System.IO.Path.Combine(AppData.Root, "logs"));
+
+    private static void OpenFolder(string path)
     {
         try
         {
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(AppData.Root)
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(path)
             {
                 UseShellExecute = true
             });

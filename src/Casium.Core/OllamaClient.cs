@@ -64,6 +64,7 @@ public sealed class ToolCallRequest
 public sealed class ChatChunk
 {
     public string? Content { get; set; }
+    public string? Thinking { get; set; }
     public List<ToolCallRequest>? ToolCalls { get; set; }
     public bool Done { get; set; }
     public string? DoneReason { get; set; }
@@ -206,7 +207,7 @@ public sealed class OllamaClient : IDisposable
     public async Task PullAsync(string model, IProgress<PullProgress> progress, CancellationToken ct)
     {
         var payload = new JsonObject { ["model"] = model, ["stream"] = true };
-        using var resp = await PostJsonAsync("/api/pull", payload, ct);
+        using var resp = await PostJsonAsync("/api/pull", payload, ct, streaming: true);
         if (!resp.IsSuccessStatusCode)
             throw new OllamaException(await DescribeErrorAsync(resp));
 
@@ -270,14 +271,21 @@ public sealed class OllamaClient : IDisposable
         if (tools is { Count: > 0 })
             payload["tools"] = tools.DeepClone();
 
-        using var resp = await PostJsonAsync("/api/chat", payload, ct);
+        using var resp = await PostJsonAsync("/api/chat", payload, ct, streaming: true);
         if (!resp.IsSuccessStatusCode)
             throw new OllamaException(await DescribeErrorAsync(resp));
 
+        var firstLine = true;
         await ReadLinesAsync(resp, line =>
         {
+            if (firstLine)
+            {
+                firstLine = false;
+                Log.Info("[chat] first stream line: " + Truncate(line, 300));
+            }
             var chunk = ParseChunk(line);
             if (chunk != null) onChunk(chunk);
+            else Log.Warn("[chat] unparsed stream line: " + Truncate(line, 300));
         }, ct);
     }
 
@@ -300,6 +308,8 @@ public sealed class OllamaClient : IDisposable
             {
                 if (msg.TryGetProperty("content", out var c) && c.ValueKind == JsonValueKind.String)
                     chunk.Content = c.GetString();
+                if (msg.TryGetProperty("thinking", out var th) && th.ValueKind == JsonValueKind.String)
+                    chunk.Thinking = th.GetString();
                 if (msg.TryGetProperty("tool_calls", out var tcs) && tcs.ValueKind == JsonValueKind.Array)
                 {
                     var calls = new List<ToolCallRequest>();
@@ -344,11 +354,16 @@ public sealed class OllamaClient : IDisposable
 
     // ---------------------------------------------------------------- plumbing
 
-    private async Task<HttpResponseMessage> PostJsonAsync(string path, JsonNode payload, CancellationToken ct)
+    private async Task<HttpResponseMessage> PostJsonAsync(string path, JsonNode payload, CancellationToken ct, bool streaming = false)
     {
         using var content = new StringContent(payload.ToJsonString(), Encoding.UTF8, "application/json");
-        return await _http.PostAsync(BaseUrl + path, content, ct);
+        return streaming
+            ? await _http.PostAsync(BaseUrl + path, content, HttpCompletionOption.ResponseHeadersRead, ct)
+            : await _http.PostAsync(BaseUrl + path, content, ct);
     }
+
+    private static string Truncate(string s, int max) =>
+        s.Length <= max ? s : s[..max] + "…";
 
     private static async Task ReadLinesAsync(HttpResponseMessage resp, Action<string> onLine, CancellationToken ct)
     {

@@ -287,6 +287,7 @@ public partial class ChatView : UserControl
         var retriedWithoutTools = false;
         var maxIterations = Math.Max(1, settings.ToolLoopMax);
         var receivedChars = 0L;
+        var thinkingChars = 0L;
         var chunkCount = 0;
 
         for (var iteration = 0; iteration < maxIterations; iteration++)
@@ -297,6 +298,7 @@ public partial class ChatView : UserControl
 
             var final = new ChatChunk();
             receivedChars = 0;
+            thinkingChars = 0;
             chunkCount = 0;
             try
             {
@@ -310,7 +312,15 @@ public partial class ChatView : UserControl
                             chunkCount++;
                             if (chunkCount == 1)
                                 Core.Log.Info($"[chat] first chunk from {_model}: " +
-                                              $"content={(chunk.Content?.Length ?? 0)} chars, done={chunk.Done}");
+                                              $"content={(chunk.Content?.Length ?? 0)} chars, " +
+                                              $"thinking={(chunk.Thinking?.Length ?? 0)} chars, done={chunk.Done}");
+                            // Reasoning models stream their reasoning separately; render it as a
+                            // muted blockquote so the bubble shows something while it thinks.
+                            if (chunk.Thinking is { Length: > 0 })
+                            {
+                                thinkingChars += chunk.Thinking.Length;
+                                bubble.Append("> " + chunk.Thinking.Replace("\n", "\n> ") + "\n\n");
+                            }
                             if (chunk.Content is { Length: > 0 })
                             {
                                 receivedChars += chunk.Content.Length;
@@ -357,12 +367,31 @@ public partial class ChatView : UserControl
                 return;
             }
 
+            catch (Exception ex)
+            {
+                Core.Log.Error(ex, "[chat] unexpected");
+                _items.Add(new NoticeChatItem { Text = "Unexpected error: " + ex.Message, Kind = NoticeKind.Error });
+                SetBusy(false);
+                return;
+            }
+
             Core.Log.Info($"[chat] stream complete: {chunkCount} chunks, {receivedChars} chars, " +
-                          $"eval={final.EvalCount}, doneReason={final.DoneReason ?? "?"}");
+                          $"{thinkingChars} thinking chars, eval={final.EvalCount}, doneReason={final.DoneReason ?? "?"}");
 
             bubble.Finish();
             bubble.Streaming = false;
             bubble.Stats = FormatStats(final);
+
+            if (receivedChars == 0 && thinkingChars == 0 && final.ToolCalls is not { Count: > 0 })
+            {
+                _items.Add(new NoticeChatItem
+                {
+                    Text = $"The engine returned no text for this reply — model \u201C{_model}\u201D, " +
+                           $"{chunkCount} chunks, eval {final.EvalCount}, reason \u201C{final.DoneReason ?? "?"}\u201D. " +
+                           "The log (Settings → Open logs folder) has the raw stream.",
+                    Kind = NoticeKind.Warning
+                });
+            }
 
             if (final.ToolCalls is { Count: > 0 })
             {
@@ -372,7 +401,8 @@ public partial class ChatView : UserControl
                 continue;
             }
 
-            _convo.Add(ChatTurn.Assistant(final.Content ?? bubble.Text));
+            // Send back only the real content — bubble.Text also contains the rendered thinking.
+            _convo.Add(ChatTurn.Assistant(final.Content ?? ""));
             SetBusy(false);
             return;
         }

@@ -16,6 +16,8 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         Bus.CaptureUiContext();
+        // Startup banner: proves which build is running and where the log lives.
+        Log.Info($"Casium {typeof(App).Assembly.GetName().Version} starting — data folder: {AppData.Root}");
 
         AppServices.SettingsService.Load();
         AppServices.Prompts.Load();

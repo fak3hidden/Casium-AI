@@ -218,6 +218,10 @@
                         <Button Style="{StaticResource Btn.Secondary}" Click="OpenDataFolder_Click">
                             <TextBlock Text="Open data folder" VerticalAlignment="Center"/>
                         </Button>
+                        <Button Style="{StaticResource Btn.Secondary}" Margin="10,0,0,0" Click="OpenLogsFolder_Click"
+                                ToolTip="casium-YYYYMMDD.log — chat stream diagnostics live here">
+                            <TextBlock Text="Open logs folder" VerticalAlignment="Center"/>
+                        </Button>
                         <Button Style="{StaticResource Btn.Danger}" Margin="10,0,0,0" Click="ResetSettings_Click">
                             <TextBlock Text="Reset all settings" VerticalAlignment="Center"/>
                         </Button>
