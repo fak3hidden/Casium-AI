@@ -357,9 +357,13 @@ public sealed class OllamaClient : IDisposable
     private async Task<HttpResponseMessage> PostJsonAsync(string path, JsonNode payload, CancellationToken ct, bool streaming = false)
     {
         using var content = new StringContent(payload.ToJsonString(), Encoding.UTF8, "application/json");
-        return streaming
-            ? await _http.PostAsync(BaseUrl + path, content, HttpCompletionOption.ResponseHeadersRead, ct)
-            : await _http.PostAsync(BaseUrl + path, content, ct);
+        if (!streaming)
+            return await _http.PostAsync(BaseUrl + path, content, ct);
+
+        // Streaming reads need ResponseHeadersRead, which PostAsync can't take —
+        // go through SendAsync with an explicit request message instead.
+        using var req = new HttpRequestMessage(HttpMethod.Post, BaseUrl + path) { Content = content };
+        return await _http.SendAsync(req, HttpCompletionOption.ResponseHeadersRead, ct);
     }
 
     private static string Truncate(string s, int max) =>
