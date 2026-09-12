@@ -121,7 +121,7 @@ def http_stream(url, payload, timeout=15):
 def default_settings():
     return {
         "ollama_host": "http://127.0.0.1:11434",
-        "theme": "paper",
+        "theme": "dark",
         "default_model": "",
         "mcp_timeout": 60,
         "autostart_mcp": False,
@@ -188,6 +188,29 @@ class Ollama:
             yield chunk
 
 OLLAMA = Ollama()
+
+
+def start_ollama():
+    """Try to launch `ollama serve` on this machine."""
+    if OLLAMA.status()["online"]:
+        return {"ok": True, "detail": "already running"}
+    try:
+        devnull = open(os.devnull, "wb")
+        if os.name == "nt":
+            DETACHED = 0x00000008 | 0x00000200
+            subprocess.Popen(["ollama", "serve"], stdout=devnull, stderr=devnull,
+                             stdin=devnull, creationflags=DETACHED)
+        else:
+            subprocess.Popen(["ollama", "serve"], stdout=devnull, stderr=devnull,
+                             stdin=devnull, start_new_session=True)
+    except (FileNotFoundError, OSError) as e:
+        return {"ok": False,
+                "detail": "Couldn't find the ollama executable. Install it from ollama.com/download, then try again."}
+    for _ in range(16):
+        time.sleep(0.5)
+        if OLLAMA.status()["online"]:
+            return {"ok": True, "detail": "started"}
+    return {"ok": True, "detail": "launched - it should come online shortly"}
 
 # ---------------------------------------------------------------- skills
 
@@ -811,7 +834,8 @@ def build_system_prompt(use_mcp, use_skills, mcp_tool_count):
                 parts.append(f"- {s['dir']}: {desc}")
     return "\n".join(parts)
 
-def chat_agent(chat, model, user_text, use_mcp, use_skills):
+def chat_agent(chat, model, user_text, use_mcp, use_skills,
+               system_prompt="", temperature=None, max_tokens=None):
     """Run one user turn through the model. Yields event dicts."""
     status = OLLAMA.status()
     if not status["online"]:
@@ -831,10 +855,25 @@ def chat_agent(chat, model, user_text, use_mcp, use_skills):
     if use_mcp:
         mcp_tools, mcp_map = MCP.all_tools()
 
-    messages = [{"role": "system", "content": build_system_prompt(use_mcp, use_skills, len(mcp_tools))}]
+    sysp = build_system_prompt(use_mcp, use_skills, len(mcp_tools))
+    if system_prompt and system_prompt.strip():
+        sysp = system_prompt.strip() + "\n\n" + sysp
+    messages = [{"role": "system", "content": sysp}]
     for m in chat["messages"][-40:]:
         if m.get("role") in ("user", "assistant") and m.get("content"):
             messages.append({"role": m["role"], "content": m["content"]})
+
+    options = {}
+    try:
+        if temperature is not None and temperature != "":
+            options["temperature"] = max(0.0, min(2.0, float(temperature)))
+    except (TypeError, ValueError):
+        pass
+    try:
+        if max_tokens:
+            options["num_predict"] = max(16, int(max_tokens))
+    except (TypeError, ValueError):
+        pass
 
     tools = builtin_tools_def() + mcp_tools
     used_tools = True
@@ -842,6 +881,8 @@ def chat_agent(chat, model, user_text, use_mcp, use_skills):
 
     for _ in range(8):
         payload = {"model": model, "messages": messages, "stream": True, "keep_alive": "30m"}
+        if options:
+            payload["options"] = options
         if tools and used_tools:
             payload["tools"] = tools
         got_tool_calls = False
@@ -911,7 +952,8 @@ def chat_agent(chat, model, user_text, use_mcp, use_skills):
 
 # ---------------------------------------------------------------- top-level chat
 
-def process_chat(chat_id, model, user_text, use_mcp, use_skills):
+def process_chat(chat_id, model, user_text, use_mcp, use_skills,
+                 system_prompt="", temperature=None, max_tokens=None):
     """Handle one user turn. Yields events. Persists the chat."""
     chat = load_chat(chat_id) if chat_id else None
     if chat is None:
@@ -990,7 +1032,8 @@ def process_chat(chat_id, model, user_text, use_mcp, use_skills):
     if note:
         model_text = user_text + "\n\n[app note: " + note + ". Acknowledge the result briefly and tell me what the skill(s) can do.]"
 
-    for ev in chat_agent_turn(chat, model, model_text, assistant, use_mcp, use_skills):
+    for ev in chat_agent_turn(chat, model, model_text, assistant, use_mcp, use_skills,
+                              system_prompt, temperature, max_tokens):
         yield ev
 
     save_chat(chat)
@@ -998,9 +1041,11 @@ def process_chat(chat_id, model, user_text, use_mcp, use_skills):
            "model": model}
 
 
-def chat_agent_turn(chat, model, user_text, assistant_msg, use_mcp, use_skills):
+def chat_agent_turn(chat, model, user_text, assistant_msg, use_mcp, use_skills,
+                    system_prompt="", temperature=None, max_tokens=None):
     """Wrap chat_agent so tokens land in the stored assistant message."""
-    for ev in chat_agent(chat, model, user_text, use_mcp, use_skills):
+    for ev in chat_agent(chat, model, user_text, use_mcp, use_skills,
+                         system_prompt, temperature, max_tokens):
         if ev.get("type") == "token":
             assistant_msg["content"] += ev["text"]
         elif ev.get("type") == "action":
@@ -1125,9 +1170,30 @@ class Handler(BaseHTTPRequestHandler):
                 if not text:
                     self._err(400, "empty message")
                     return
-                self._stream(process_chat(chat_id, model, text,
-                                          bool(body.get("mcp", True)),
-                                          bool(body.get("skills", True))))
+                cfg = body.get("cfg") or {}
+                if chat_id and cfg:
+                    chat = load_chat(chat_id)
+                    if chat:
+                        chat["cfg"] = cfg
+                        save_chat(chat)
+                self._stream(process_chat(
+                    chat_id, model, text,
+                    bool(body.get("mcp", True)),
+                    bool(body.get("skills", True)),
+                    system_prompt=body.get("system_prompt", ""),
+                    temperature=body.get("temperature"),
+                    max_tokens=body.get("max_tokens"),
+                ))
+            elif path == "/api/chats/cfg":
+                chat = load_chat(body.get("id", ""))
+                if chat:
+                    chat["cfg"] = body.get("cfg") or {}
+                    save_chat(chat)
+                    self._json({"ok": True})
+                else:
+                    self._err(404, "chat not found")
+            elif path == "/api/ollama/start":
+                self._json(start_ollama())
             elif path == "/api/models/pull":
                 name = (body.get("name") or "").strip()
                 if not name:
