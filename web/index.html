@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="paper">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Casium AI</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12,5 V19 M5,12 H19"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3,7 V19 A1,1 0 0,0 4,20 H20 A1,1 0 0,0 21,19 V9 A1,1 0 0,0 20,8 H12 L10,6 H4 A1,1 0 0,0 3,7 Z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><path d="M15.5,14 L20,18.5 M10,17 A7,7 0 1,0 10,3 A7,7 0 1,0 10,17 Z"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><path d="M12,15.5 A3.5,3.5 0 1,0 12,8.5 A3.5,3.5 0 1,0 12,15.5 Z M19.4,15 A1.65,1.65 0 0,0 19.7,16.8 L19.8,16.9 A2,2 0 1,1 17,19.7 L16.9,19.6 A1.65,1.65 0 0,0 15,19.4 A1.65,1.65 0 0,0 14,20.9 V21 A2,2 0 1,1 10,21 V20.9 A1.65,1.65 0 0,0 8.9,19.4 A1.65,1.65 0 0,0 7.1,19.7 L7,19.8 A2,2 0 1,1 4.2,17 L4.3,16.9 A1.65,1.65 0 0,0 4.6,15 A1.65,1.65 0 0,0 3.1,14 H3 A2,2 0 1,1 3,10 H3.1 A1.65,1.65 0 0,0 4.6,8.9 A1.65,1.65 0 0,0 4.3,7.1 L4.2,7 A2,2 0 1,1 7,4.2 L7.1,4.3 A1.65,1.65 0 0,0 8.9,4.6 H9 A1.65,1.65 0 0,0 10,3.1 V3 A2,2 0 1,1 14,3 V3.1 A1.65,1.65 0 0,0 15,4.6 A1.65,1.65 0 0,0 16.8,4.3 L16.9,4.2 A2,2 0 1,1 19.7,7 L19.6,7.1 A1.65,1.65 0 0,0 19.4,8.9 V9 A1.65,1.65 0 0,0 20.9,10 H21 A2,2 0 1,1 21,14 H20.9 A1.65,1.65 0 0,0 19.4,15 Z"/></symbol>
+    <symbol id="i-chevron-r" viewBox="0 0 24 24"><path d="M9,6 L15,12 L9,18"/></symbol>
+    <symbol id="i-chevron-l" viewBox="0 0 24 24"><path d="M15,6 L9,12 L15,18"/></symbol>
+    <symbol id="i-chevron-u" viewBox="0 0 24 24"><path d="M6,15 L12,9 L18,15"/></symbol>
+    <symbol id="i-chevron-d" viewBox="0 0 24 24"><path d="M6,9 L12,15 L18,9"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8,5 L19,12 L8,19 Z" class="fill"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6,6 L18,18 M18,6 L6,18"/></symbol>
+    <symbol id="i-min" viewBox="0 0 24 24"><path d="M6,12 H18"/></symbol>
+    <symbol id="i-max" viewBox="0 0 24 24"><path d="M6,6 H18 V18 H6 Z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12,4 V15 M7,10 L12,15 L17,10 M5,19 H19"/></symbol>
+    <symbol id="i-plug" viewBox="0 0 24 24"><path d="M10,17 L15,12 L10,7 M15,12 H3 M14,4 H19 A1,1 0 0,1 20,5 V19 A1,1 0 0,1 19,20 H14"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M5,4 H15 A2,2 0 0,1 17,6 V20 H7 A2,2 0 0,1 5,18 Z M17,8 H9 M5,18 A2,2 0 0,0 7,20 V21 A2,2 0 0,1 5,19 Z"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4,5 H20 V17 H9 L4,21 Z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5,7 H19 M9.5,7 V5 H14.5 V7 M7,7 L7.8,20 H16.2 L17,7"/></symbol>
+    <symbol id="i-power" viewBox="0 0 24 24"><path d="M12,4 V11 M7.5,7 A7,7 0 1,0 16.5,7"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="M8,6 L2,12 L8,18 M16,6 L22,12 L16,18"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20,12 A8,8 0 1,1 12,4 M16,2 V5 H13"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M12,3 L20,7 V17 L12,21 L4,17 V7 Z M4,7 L12,11 L20,7 M12,11 V21"/></symbol>
+  </defs>
+</svg>
+
+<div class="win">
+
+  <!-- title bar -->
+  <div class="titlebar" id="titlebar">
+    <div class="tb-center">
+      <img src="icon.svg" width="16" height="16" alt="" draggable="false">
+      <span class="tb-title">Casium AI</span>
+    </div>
+    <div class="tb-right">
+      <button class="cap" title="Minimize"><svg class="ic"><use href="#i-min"/></svg></button>
+      <button class="cap" title="Maximize"><svg class="ic"><use href="#i-max"/></svg></button>
+      <button class="cap cap-close" title="Close"><svg class="ic"><use href="#i-close"/></svg></button>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- explorer -->
+    <aside class="sidebar" id="sidebar">
+      <div class="side-inner">
+        <div class="side-head">
+          <span class="side-head-title">Explorer</span>
+          <button class="ibtn" id="collapseSidebar" title="Hide explorer">
+            <svg class="ic"><use href="#i-chevron-l"/></svg>
+          </button>
+        </div>
+        <div class="filterbox card-inset">
+          <svg class="ic ic-dim filter-icon"><use href="#i-search"/></svg>
+          <input class="bare-input" id="filterBox" type="text" placeholder="Filter everything" spellcheck="false" autocomplete="off">
+        </div>
+        <div class="side-scroll">
+          <div class="side-section" data-section="models">
+            <div class="section-head-row">
+              <button class="section-head" data-open="1">
+                <svg class="ic chev"><use href="#i-chevron-r"/></svg>
+                <span>MODELS</span>
+              </button>
+              <span class="row-actions">
+                <button class="ibtn ibtn-sm" data-act="pull" title="Pull model"><svg class="ic"><use href="#i-plus"/></svg></button>
+              </span>
+            </div>
+            <div class="side-list" id="modelsList"></div>
+            <div class="side-empty" id="modelsEmpty">No models installed.<br>Pull one with the + button.</div>
+          </div>
+          <div class="side-section" data-section="mcp">
+            <div class="section-head-row">
+              <button class="section-head" data-open="1">
+                <svg class="ic chev"><use href="#i-chevron-r"/></svg>
+                <span>MCP APPS</span>
+              </button>
+              <span class="row-actions">
+                <button class="ibtn ibtn-sm" data-act="mcp-add" title="Add MCP app"><svg class="ic"><use href="#i-plus"/></svg></button>
+              </span>
+            </div>
+            <div class="side-list" id="mcpList"></div>
+            <div class="side-empty" id="mcpEmpty">No MCP apps connected.<br>Add GitHub, filesystem, fetch...</div>
+          </div>
+          <div class="side-section" data-section="skills">
+            <div class="section-head-row">
+              <button class="section-head" data-open="1">
+                <svg class="ic chev"><use href="#i-chevron-r"/></svg>
+                <span>SKILLS</span>
+              </button>
+              <span class="row-actions">
+                <button class="ibtn ibtn-sm" data-act="skill-install" title="Install skill from a link"><svg class="ic"><use href="#i-download"/></svg></button>
+              </span>
+            </div>
+            <div class="side-list" id="skillsList"></div>
+            <div class="side-empty" id="skillsEmpty">No skills yet.<br>Ask the AI: "install this skill for me [link]"</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- main -->
+    <div class="main">
+
+      <!-- tab bar -->
+      <div class="tabbar">
+        <button class="ibtn ibtn-tall" id="expandSidebar" title="Show explorer" style="display:none">
+          <svg class="ic"><use href="#i-chevron-r"/></svg>
+        </button>
+        <div class="tabbar-mid">
+          <div class="tabstrip-clip" id="tabstripClip">
+            <div class="tabstrip" id="tabstrip"></div>
+          </div>
+        </div>
+        <div class="tabbar-right">
+          <button class="ibtn ibtn-tall" id="newChatBtn" title="New chat"><svg class="ic"><use href="#i-plus"/></svg></button>
+          <button class="btn btn-secondary" id="settingsBtn" title="Settings">
+            <svg class="ic"><use href="#i-gear"/></svg><span>Settings</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- views -->
+      <div class="views">
+
+        <!-- start -->
+        <div class="view" id="startView">
+          <div class="start-wrap">
+            <div class="start-hero">
+              <img src="icon.svg" width="36" height="36" alt="" draggable="false">
+              <span class="start-title">Casium AI</span>
+            </div>
+            <div class="start-sub" id="startSub">Loading…</div>
+
+            <div class="start-cards">
+              <button class="start-card" data-act="new-chat">
+                <svg class="ic sc-ic"><use href="#i-plus"/></svg>
+                <div class="sc-title">New chat</div>
+                <div class="sc-desc">Start a conversation with a local model.</div>
+              </button>
+              <button class="start-card" data-act="pull">
+                <svg class="ic sc-ic"><use href="#i-download"/></svg>
+                <div class="sc-title">Pull a model</div>
+                <div class="sc-desc">Download one from the Ollama library.</div>
+              </button>
+              <button class="start-card" data-act="mcp-add">
+                <svg class="ic sc-ic"><use href="#i-plug"/></svg>
+                <div class="sc-title">Add an MCP app</div>
+                <div class="sc-desc">Give the AI access to GitHub and more.</div>
+              </button>
+              <button class="start-card" data-act="skill-install">
+                <svg class="ic sc-ic"><use href="#i-book"/></svg>
+                <div class="sc-title">Install a skill</div>
+                <div class="sc-desc">Paste a repo link and the AI sets it up.</div>
+              </button>
+            </div>
+
+            <div class="eyebrow recent-eyebrow">RECENT CHATS</div>
+            <div id="recentList"></div>
+            <div class="caption recent-empty" id="recentEmpty">Chats you start will show up here.</div>
+          </div>
+        </div>
+
+        <!-- chat -->
+        <div class="view view-chat" id="chatView" style="display:none">
+          <div class="chat-top">
+            <span class="chat-model-label" id="chatModelLabel">Model</span>
+            <div class="chat-top-right">
+              <label class="switch" title="Connect MCP apps in this chat">
+                <input type="checkbox" id="mcpSwitch" checked><span class="track"><span class="thumb"></span></span>
+                <span class="sw-label">MCP</span>
+              </label>
+              <label class="switch" title="Use installed skills in this chat">
+                <input type="checkbox" id="skillsSwitch" checked><span class="track"><span class="thumb"></span></span>
+                <span class="sw-label">Skills</span>
+              </label>
+            </div>
+          </div>
+          <div class="chat-scroll" id="chatScroll">
+            <div class="chat-inner" id="chatInner"></div>
+          </div>
+          <div class="composer card-inset">
+            <select class="model-select" id="modelSelect" title="Model"></select>
+            <textarea class="chat-input bare-input" id="chatInput" rows="1"
+              placeholder="Ask the AI anything — try: Install this skill for me https://github.com/nvidia/skills"></textarea>
+            <button class="btn btn-primary" id="sendBtn" title="Send">
+              <svg class="ic ic-on-accent"><use href="#i-play"/></svg><span>Send</span>
+            </button>
+          </div>
+          <div class="console" id="console">
+            <div class="console-head">
+              <div class="segments">
+                <button class="seg seg-active" data-tab="console">Console</button>
+                <button class="seg" data-tab="activity">Activity</button>
+              </div>
+              <div class="console-actions">
+                <button class="btn btn-ghost btn-xs" id="clearConsole">Clear</button>
+                <button class="ibtn ibtn-sm" id="consoleToggle" title="Toggle console">
+                  <svg class="ic" id="consoleChev"><use href="#i-chevron-u"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="console-body" id="consoleBody"></div>
+            <div class="console-body" id="activityBody" style="display:none"></div>
+            <div class="console-cmd">
+              <span class="cmd-prompt">›</span>
+              <input class="bare-input mono" id="cmdInput" type="text" spellcheck="false"
+                placeholder="/help" autocomplete="off">
+            </div>
+          </div>
+        </div>
+
+        <!-- settings -->
+        <div class="view" id="settingsView" style="display:none">
+          <div class="settings-wrap">
+            <div class="page-title">Settings</div>
+            <div class="page-subtitle">Theme, Ollama connection and app data.</div>
+
+            <div class="eyebrow">APPEARANCE</div>
+            <div class="card" style="padding:16px 16px 18px">
+              <div class="body-text strong">Theme</div>
+              <div class="caption" style="margin:2px 0 12px">Applied instantly and remembered next launch.</div>
+              <div class="theme-panel" id="themePanel"></div>
+            </div>
+
+            <div class="eyebrow">OLLAMA</div>
+            <div class="card" style="padding:16px 16px 18px">
+              <div class="body-text strong">Server address</div>
+              <div class="caption" style="margin:2px 0 12px">Where Casium AI talks to Ollama. Default is http://127.0.0.1:11434</div>
+              <div class="row-gap">
+                <input class="field" id="ollamaHost" type="text" spellcheck="false" placeholder="http://127.0.0.1:11434">
+                <button class="btn btn-secondary" id="saveOllama" style="height:33px">Save</button>
+                <button class="btn btn-ghost" id="testOllama" style="height:33px">Test</button>
+              </div>
+              <div class="caption" id="ollamaTestResult" style="margin-top:8px"></div>
+            </div>
+
+            <div class="eyebrow">MCP</div>
+            <div class="card" style="padding:16px 16px 18px">
+              <div class="body-text strong">Tool call timeout</div>
+              <div class="caption" style="margin:2px 0 12px">Seconds to wait for an MCP app to answer (default 60).</div>
+              <input class="field" id="mcpTimeout" type="number" min="5" max="600" style="width:90px">
+            </div>
+
+            <div class="eyebrow">DATA</div>
+            <div class="card" style="padding:16px 16px 18px">
+              <div class="row-gap" style="align-items:center">
+                <div>
+                  <div class="body-text strong" id="dataDirText">—</div>
+                  <div class="caption">Chats, skills and MCP config live here.</div>
+                </div>
+                <button class="btn btn-secondary" id="copyDataDir" style="height:30px; margin-left:auto">Copy path</button>
+              </div>
+            </div>
+
+            <div class="eyebrow">SYSTEM</div>
+            <div class="card" style="padding:16px 16px 18px">
+              <div class="row-gap" style="align-items:center">
+                <div>
+                  <div class="body-text strong" id="sysVersion">Casium AI</div>
+                  <div class="caption" id="sysCounts">—</div>
+                </div>
+                <button class="btn btn-secondary" id="refreshAll" style="height:30px; margin-left:auto">
+                  <svg class="ic"><use href="#i-refresh"/></svg><span>Refresh</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- status bar -->
+  <div class="statusbar">
+    <div class="sb-left">
+      <svg class="ic sb-ic"><use href="#i-code"/></svg>
+      <span class="sb-text" id="sbView">Start</span>
+      <span class="sb-text" id="sbModel"></span>
+    </div>
+    <div class="sb-right">
+      <span class="sb-text" id="sbTheme">Paper</span>
+      <span class="dot" id="sbDot"></span>
+      <span class="sb-text" id="sbStatus">Ollama…</span>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="scrim" style="display:none"></div>
+<div class="modal" id="modal" style="display:none">
+  <div class="modal-title" id="modalTitle"></div>
+  <div class="modal-body" id="modalBody"></div>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" id="modalCancel">Cancel</button>
+    <button class="btn btn-primary" id="modalOk">OK</button>
+  </div>
+</div>
+
+<div class="ctx" id="ctx" style="display:none"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
